@@ -13,6 +13,17 @@ import signal
 app = Flask(__name__)
 
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers',
+                         'Content-Type, Authorization')
+    response.headers.add('Access-Control-Allow-Methods',
+                         'GET, PUT, POST,DELETE,OPTIONS')
+    response.headers.add('Origin', '127.0.0.1')
+    return response
+
+
 def threading(p):
     fp = open("in0"+str(p)+".txt", "r")
     contents = fp.read()
@@ -42,15 +53,6 @@ def threading(p):
     return(stdout, stderr, t, timeout)
     # write code to compare output with test_case_op file and update value of status
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers',
-                         'Content-Type, Authorization')
-    response.headers.add('Access-Control-Allow-Methods',
-                         'GET, PUT, POST,DELETE,OPTIONS')
-    response.headers.add('Origin', '127.0.0.1')
-    return response
 
 @app.route('/v1/run_code', methods=['POST'])
 def compile():
@@ -63,26 +65,27 @@ def compile():
         # make dir for each student under each contest
         os.makedirs(request.json['contest_id'] +
                     "/temp_"+request.json['student_id'])
-    finally:
+    except:
+        pass
 
-        # store the given code into the student folder
-        fp = open(request.json['contest_id']+"/temp_" +
-                  request.json['student_id']+"/temp."+request.json['language'], "w")
-        fp.write(request.json['code'])
-        fp.close()
+    # store the given code into the student folder
+    fp = open(request.json['contest_id']+"/temp_" +
+              request.json['student_id']+"/temp."+request.json['language'], "w")
+    fp.write(request.json['code'])
+    fp.close()
 
-        # call languages class and get status(coorect/wrong answer) or if error occured
-        lang = languages(
-            request.json['student_id'], request.json['problem_id'], request.json['contest_id'])
-        ip_lang = request.json['language']
-        if(ip_lang == "py"):
-            status, err = lang.py_lang()
-        elif(ip_lang == "c"):
-            status, err = lang.C_lang()
-        elif(ip_lang == "cpp"):
-            status, err = lang.Cpp_lang()
-        elif(ip_lang == "java"):
-            status, err = lang.java_lang()
+    # call languages class and get status(coorect/wrong answer) or if error occured
+    lang = languages(
+        request.json['student_id'], request.json['problem_id'], request.json['contest_id'], request.json['time_out'])
+    ip_lang = request.json['language']
+    if(ip_lang == "py"):
+        status, err = lang.py_lang()
+    elif(ip_lang == "c"):
+        status, err = lang.C_lang()
+    elif(ip_lang == "cpp"):
+        status, err = lang.Cpp_lang()
+    elif(ip_lang == "java"):
+        status, err = lang.java_lang()
 
     # new_gui = subprocess.Popen(["python", path])
     # keyboard_output = subprocess.check_output(["./a.out <", path[:1],path[2:]]).decode("utf-8")
@@ -93,8 +96,8 @@ def compile():
 
     # questions = obj.extract_questions(request.json)
     # # {'questions':obj.test_transcript(request.json['transcript'])}
-
-    return jsonify(results), 200
+    #print('app process id ', os.getpid())
+    return jsonify(status), 200
 
 
 @app.route('/v1/test', methods=['POST'])
@@ -112,6 +115,8 @@ def compile_test():
 
     p = Pool(processes=5)
     results = p.map(threading, list(range(5)))
+    # print('debug 1', p)
+
     p.close()
 
     # keyboard_output = keyboard_output[:-1]
