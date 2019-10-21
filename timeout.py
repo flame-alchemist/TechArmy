@@ -1,19 +1,30 @@
-def long_function_call():
-	s=0
-	for i in range(100000000):
-		s+=i
-	print(i)
+def binarySearch(arr, l, r, x):
 
-import signal
+    # Check base case
+    if r >= l:
 
-def signal_handler(signum, frame):
-    raise Exception("Timed out!")
+        mid = int(l + (r - l)/2)
 
-signal.signal(signal.SIGALRM, signal_handler)
-signal.alarm(2)   # timeout seconds
-try:
-    long_function_call()
-except Exception as i:
-    print(i.args[0])
-    
+        # If element is present at the middle itself
+        if arr[mid] == x:
+            return mid
 
+        # If element is smaller than mid, then it can only
+        # be present in left subarray
+        elif arr[mid] > x:
+            return binarySearch(arr, l, mid-1, x)
+
+        # Else the element can only be present in right subarray
+        else:
+            return binarySearch(arr, mid+1, r, x)
+
+    else:
+        # Element is not present in the array
+        return -1
+
+
+n = int(input())
+a = [int(x) for x in input().split()]
+k = int(input())
+
+print(binarySearch(a, 0, n-1, k))
