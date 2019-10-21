@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>CODE</title>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<style>
+
+header {
+  background-image: linear-gradient(to bottom right, #19181A, #B19F9E);
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+  color: #F3E3E0;
+font-family:verdana
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+font-family:verdana
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #B19F9E;
+}
+
+.button1:hover {
+  background-color: #19181A;
+  color: white;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #19181A;
+}
+
+.button2:hover {
+  background-color: #B19F9E;
+  color: black;
+}
+
+#dropdown{
+background-color: white;
+ border: 2px solid black;
+  color:#19181A ;
+ font-size: 20px;
+}
+
+#dropdown:hover{
+background-color: #19181A;
+  color: white;
+}
+
+</style>
+</head>
+<body bgcolor="#F7F9FB">
+
+<header>
+  <h2><i>PROBLEM 1</i></h2>
+</header>
+
+<table>
+<tr>
+
+<td style="height:400px;width:45%;">
+<p style="font-size:30px; color:#19181A; font-family:verdana">Binary Search</p>
+<p style="font-size:20px;color:#19181A; font-family:verdana"">Search a sorted array by repeatedly dividing the search interval in half. Begin with an interval covering the whole array. If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half. Otherwise narrow it to the upper half. Repeatedly check until the value is found or the interval is empty.
+</p>
+</td>
+<td>
+
+<select id = "dropdown" style="position:absolute;right:39.2%;top:140px;">
+  <option value="python">Python 3</option>
+  <option value="c">C</option>
+  <option value="c_cpp">C++</option>
+  <option value="java">Java</option>
+</select>
+<br>
+<br>
+<br>
+<br>
+<div id="editor"style="width:45%;position:absolute;right:15px;top:170px;background-color: white;font-size: 20px;color:#B19F9E;"> </div>
+
+</td>
+</tr>
+
+</table>
+
+</br>
+</br>
+
+<button class="button button1">Compile and run</button>
+<button class="button button2" onclick = "submit_code()">Submit</button>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/monokai");
+      editor.getSession().setMode("ace/mode/javascript");
+      document.getElementById("editor").style.height = "400px";
+
+      var obj = document.getElementById("dropdown")
+      obj.onchange = function(){
+        if(obj.value === "c")
+          editor.session.setMode("ace/mode/" + "c_cpp")
+        else
+          editor.session.setMode("ace/mode/" + obj.value)
+      }
+      var x=new XMLHttpRequest();
+
+      function submit_code(){
+        console.log(editor.getValue());
+        var x=new XMLHttpRequest();
+        x.onreadystatechange=function(){
+    console.log(x.readyState,x.status);
+        if(x.readyState==4 && x.status==200){
+            console.log('rec');
+            console.log(JSON.parse(x.responseText));
+        }
+      };
+
+
+        x.open("POST","http://localhost:5001/v1/run_code",true);
+        x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        x.send(JSON.stringify({'code': editor.getValue(),
+        'language': 'py',
+        'problem_id': 'p1',
+        'student_id': 'sharath',
+        'contest_id': 'c1',
+        'time_out': 2 } ));
+
+
+
+      var table = document.createElement('table');
+      for (var i = 1; i < 4; i++){
+      var tr = document.createElement('tr');   
+
+      var td1 = document.createElement('td');
+      var td2 = document.createElement('td');
+
+      var text1 = document.createTextNode('Text1');
+      var text2 = document.createTextNode('Text2');
+
+      td1.appendChild(text1);
+      td2.appendChild(text2);
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+
+      table.appendChild(tr);
+  }
+  document.body.appendChild(table);
+      }
+
+      
+     
+
+</script>
+
+
+</body>
+</html>
+
