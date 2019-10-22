@@ -1,3 +1,5 @@
+import time
+time.sleep(1)
 def binarySearch(arr, l, r, x):
 
     # Check base case

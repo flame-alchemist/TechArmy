@@ -56,7 +56,7 @@ class languages:
 	
         status = (stdout == contents)
 
-        return(status, stdout, contents, stderr, t)
+        return(status, stdout, contents, stderr, round(t,4))
 
     def get_number_of_testcases(self):
         fp = open("problems/"+self.problem_id+"/number_cases.txt", "r")
