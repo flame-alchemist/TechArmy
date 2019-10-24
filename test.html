@@ -225,9 +225,9 @@
           <td>
 
           <select id = "dropdown" style="position:absolute;right:39.2%;top:140px;">
-            <option value="python">Python 3</option>
+            <option value="py">Python 3</option>
             <option value="c">C</option>
-            <option value="c_cpp">C++</option>
+            <option value="cpp">C++</option>
             <option value="java">Java</option>
           </select>
           <br>
@@ -341,11 +341,11 @@
                 }
               };
 
-              
+                var language = document.getElementById("dropdown");
                 x.open("POST","http://localhost:5001/v1/run_code",true);
                 x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 x.send(JSON.stringify({'code': editor.getValue(),
-                'language': 'py',
+                'language': language.value,
                 'problem_id': 'p1',
                 'student_id': 'sharath',
                 'contest_id': 'c1',
