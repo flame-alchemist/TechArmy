@@ -330,8 +330,10 @@
                     var text1 = document.createTextNode('Test Case Failed');
                     if(res_text[i][3]=="")
                       var text2 = document.createTextNode("Wrong Output"); 
-                    else
+                    else if(res_text[i][3])
                       var text2 = document.createTextNode(res_text[i][3]); 
+                    else
+                      var text2 = document.createTextNode(res_text[3]); 
       
                     tr.setAttribute('class',"res_tr_false");
 
