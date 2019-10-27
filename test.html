@@ -167,6 +167,12 @@
         margin: 1px;
       }
 
+      .res_tr_tle{
+        border: 1px solid;
+        background-color: rgb(240, 201, 75);
+        margin: 1px;
+      }     
+
       .button1 {
         background-color: white; 
         color: black; 
@@ -334,8 +340,11 @@
                       var text2 = document.createTextNode(res_text[i][3]); 
                     else
                       var text2 = document.createTextNode(res_text[3]); 
-      
-                    tr.setAttribute('class',"res_tr_false");
+    
+                    if(res_text[i][3]=="Time Limit Exceeded")
+                      tr.setAttribute('class',"res_tr_tle");
+                    else  
+                      tr.setAttribute('class',"res_tr_false");
 
                   }
                   submit_button[0].disabled = false;
