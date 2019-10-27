@@ -277,9 +277,15 @@
 
           function submit_code(){
             console.log(editor.getValue());
-            
+            var submit_button = document.getElementsByClassName("button button2");
+            submit_button[0].disabled = true;
             var x=new XMLHttpRequest();
             x.onreadystatechange=function(){
+            // if(document.getElementById("load") && document.getElementById('center_align')){
+            //     var load = document.getElementById("load");
+            //     //alert(load);
+            //     document.getElementById('center_align').removeChild(load);
+            // }
             var loading = document.createElement('img')
             loading.setAttribute('id',"load");
             loading.setAttribute('src','ajax-loader.gif')
@@ -330,7 +336,7 @@
                     tr.setAttribute('class',"res_tr_false");
 
                   }
-              
+                  submit_button[0].disabled = false;
                   td1.appendChild(text1);
                   td2.appendChild(text2);
                   tr.appendChild(td1);
