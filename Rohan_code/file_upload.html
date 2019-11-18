@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>file upload page</title>
+        
+        <script>
+            function showTestCases(){
+                var main_div = document.getElementById('test_cases');
+                console.log(main_div)
+                if(main_div)
+                    document.getElementById('problem_form').removeChild(document.getElementById('test_cases'));
+                main_div = document.createElement('div');
+                main_div.setAttribute('id','test_cases');
+                var no_test = parseInt(document.getElementById('no_test').value);
+                for(i=0;i<no_test;i++){
+                    var in_file = document.createElement('input');
+                    var out_file = document.createElement('input');
+                    in_file.setAttribute('type','file');
+                    out_file.setAttribute('type','file');
+                    in_file.setAttribute('name','input'+i);
+                    out_file.setAttribute('name','output'+i);
+                    var score = document.createElement('input');
+                    score.setAttribute('type','number');
+                    score.setAttribute('name','score'+i);
+                    var div = document.createElement('div');
+                    div.appendChild(in_file);
+                    div.appendChild(out_file);
+                    div.appendChild(score);
+                    div.appendChild(document.createElement('br'));
+                    main_div.appendChild(div);
+                }
+                var button = document.createElement('input');
+             
+                button.setAttribute('type','button');
+                button.setAttribute('onclick','upload()');
+                button.setAttribute('value','Add Problem');
+                main_div.appendChild(button);
+                document.getElementById('problem_form').appendChild(main_div);
+            }
+            function upload(){
+                var fd = new FormData(document.getElementById('problem_form'));
+                var xhr = new XMLHttpRequest()
+                xhr.open("POST","http://localhost:5000/upload",true);
+                xhr.onreadystatechange = function(){
+                    if (xhr.status === 200) //&& xhr.readyState === 4)
+                    {
+                        var myObj = JSON.parse(this.responseText);
+                        //console.log(myObj);
+                        if(sessionStorage.getItem("problemids"))
+                        {
+                            var pid = sessionStorage.getItem("problemids");
+                            pid.push(myObj["id"]);
+                            sessionStorage.removeItem("problemids");
+                            sessionStorage.setItem("problemids",pid);
+                        }
+                        // else
+                        //     sessionStorage.setItem("problemids",myObj["id"]);
+                    }
+                    else
+                        alert("fail");
+                };
+                xhr.send(fd);
+            }
+        </script>
+    </head>
+    <body>
+        <form id = 'problem_form' method="post" enctype="multipart/form-data">
+        <input type="text" placeholder="problem title" name='problem_title'/>
+        <textarea placeholder="problem description" name="problem_description"></textarea><br/>
+        <textarea placeholder="sample_input" name="sample_input"></textarea>
+        <textarea placeholder="sample_output" name="sample_output"></textarea><br/>
+        <input type='text' placeholder="max_time_limit" name="max_time_limit"/><br/>
+        <select id = 'no_test' onchange="showTestCases()">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+        </select><br/>
+        <div id='test_cases'></div>
+        </form>
+    </body>
+</html>
