@@ -30,7 +30,6 @@ fs = gridfs.GridFS(db)
 @app.route("/api/v1/student", methods=['POST'])
 def addStudent():
     student = db.student
-
     name = request.json["name"]
     rollno = request.json["rollno"]
     email = request.json["email"]
@@ -44,6 +43,7 @@ def addStudent():
         abort(405)
     else:
         student.insert({"name":name, "rollno":rollno, "_id":email, "phno":phno, "university":university, "CGPA":cgpa})
+
         return jsonify({}),201
 
 # <--------------------------ADD USER----------------->
@@ -100,7 +100,7 @@ def addProblem():
 	for i in range(len(request.files)//2):
 		input_id = fs.put(request.files['input'+str(i)])
 		output_id = fs.put(request.files['output'+str(i)])
-		
+		print(type(input_id),input_id)
 		temp = {"input_file":input_id, "output_file":output_id, "score":request.form['score'+str(i)]}
 		test_cases["test_case_no_"+str(i)]=temp 
 	problem_id = str(uuid.uuid1())
@@ -120,7 +120,7 @@ def addContest():
 	contest_upload = request.json
 
 	contest = db.contest
-	res = contest.insert_one(contest_upload)
+	res = contest.insert_one(contest_upload)	
 	if res:
 		return jsonify({}),201
 	else:
@@ -182,13 +182,29 @@ def getProblemDescription():
 
 @app.route('/getTestCases',methods= ['GET','OPTIONS'])
 def getTestCases():
+		print(request.json)
+		print(request.args)
 		if request.method == 'GET':
-			pid=request.args.get('problem_id',type=str)
+			# pid=request.args.get('problem_id',type=str)
+			pid = request.json['problem_id']
+			print("pid",pid)
 			ab=db.problem.find_one({"problem_id":pid})
 			ab1 = json.loads(json_util.dumps(ab))
-			cd=ab1["Test_case"]
-
-			return cd,201
+			cd=ab1["Test_cases"]
+			#print(cd['test_case_no_0']['input_file'])
+			#print(cd['test_case_no_1']['input_file'])
+			test_cases = {}
+			for key,value in cd.items():
+				temp = {
+					'input_file' : fs.get(ObjectId(cd[key]['input_file']['$oid'])).read().decode('ascii'),
+					'output_file' : fs.get(ObjectId(cd[key]['output_file']['$oid'])).read().decode('ascii'),
+					'score' : cd['test_case_no_0']['score']
+				}
+				test_cases[key[-1]] = temp
+			print(test_cases)
+			# content = fs.get(ObjectId(cd['test_case_no_0']['input_file']['$oid'])).read()
+			# print(content)
+			return jsonify(test_cases),200
 		else:
 			return jsonify({}),405
 
@@ -239,4 +255,4 @@ def addBestCode():
 			return jsonify({}),405'''
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(port=5001,debug=True)

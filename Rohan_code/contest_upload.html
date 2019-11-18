@@ -11,12 +11,12 @@
             function logout()
             {
                 sessionStorage.removeItem("name");
-                window.location.href = "file:///home/flame-alchemist/Desktop/SE_Project/TechArmy/Rohan_code/login.html";
+                window.location.href = "login.html";
             }
             function create()
             {
                 var name = sessionStorage.getItem("name");
-                window.location.href = "file:///home/flame-alchemist/Desktop/SE_Project/TechArmy/Rohan_code/file_upload.html";
+                window.location.href = "file_upload.html";
             }
 
         </script>
@@ -24,7 +24,7 @@
     <body onload="loading()">
         <span><h1 id="hello"></h1><button onclick="logout()">Logout</button></span><br/>
         <div id="contest_div">
-           <a href="file:///home/flame-alchemist/Desktop/SE_Project/TechArmy/Rohan_code/file_upload.html"> <button id="new_contest"> Create contest</button><br/> </a>
+           <a href="file_upload.html"> <button id="new_contest"> Create contest</button><br/> </a>
         </div>
         <div id="contest_div2">
             <a href="view_contest.html"><button id> View contest</button><br/></a>
