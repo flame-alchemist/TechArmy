@@ -22,6 +22,7 @@
                         //alert("User logged in");
                         var myObj = JSON.parse(this.responseText);
                         sessionStorage.setItem("name", myObj["name"]);
+                        sessionStorage.setItem("email",myObj["email"]);
                         window.location.href = "file:///home/flame-alchemist/Desktop/SE_Project/TechArmy/Rohan_code/contest_upload.html";
                     }
                     else

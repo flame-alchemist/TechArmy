@@ -16,41 +16,18 @@
             function create()
             {
                 var name = sessionStorage.getItem("name");
-                
-                var field = document.createElement('input');
-                field.setAttribute('type','text');
-                field.setAttribute('name','time');
-                field.setAttribute('placeholder','Total Time')
-                var time_limit = field.value;
-                var divobj = document.getElementById("contest_div");
-                divobj.appendChild(field);
-                
-                
-                // CREATING BUTTON TO SUBMIT AND INCLUDE FILE UPLOAD
-
                 window.location.href = "file:///home/flame-alchemist/Desktop/SE_Project/TechArmy/Rohan_code/file_upload.html";
-
-                var obj = {"user":name, "passkey":"sample_pass", "Total_time_limit":1,"problem_id":sessionStorage.getItem("problemids")};
-                var JSONdata = JSON.stringify(obj);
-                console.log(JSONdata);
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://0.0.0.0:5000/addContest", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.onreadystatechange = function(){
-                    if (xhr.status === 201)     //&& xhr.readyState === 4)
-                        alert("success");
-                    else
-                        alert("fail");
-                };
-                xhr.send(JSONdata);
-                alert("Processing");
             }
+
         </script>
     </head>
     <body onload="loading()">
         <span><h1 id="hello"></h1><button onclick="logout()">Logout</button></span><br/>
         <div id="contest_div">
-            <button id="new_contest" onclick="create()"> Create contest</button><br/>
+           <a href="file:///home/flame-alchemist/Desktop/SE_Project/TechArmy/Rohan_code/file_upload.html"> <button id="new_contest"> Create contest</button><br/> </a>
+        </div>
+        <div id="contest_div2">
+            <a href="view_contest.html"><button id> View contest</button><br/></a>
         </div>
     </body>
 </html>

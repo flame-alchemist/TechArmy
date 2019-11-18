@@ -82,7 +82,7 @@ def checkUser():
 		res = user.find_one({"_id":email, "password":password})
 		if res:
 			print('success')
-			return jsonify({"name":res["name"]}),201
+			return jsonify({"email":res["_id"],"name":res["name"]}),201
 		else:
 			print('failure')
 			return jsonify({}),403
@@ -117,6 +117,18 @@ def addProblem():
 # <--------------------------ADD CONTEST----------------->
 @app.route('/addContest', methods = ['POST'])
 def addContest():
+	contest_upload = request.json
+
+	contest = db.contest
+	res = contest.insert_one(contest_upload)
+	if res:
+		return jsonify({}),201
+	else:
+		return jsonify({}),405
+
+# <--------------------------VIEW CONTEST----------------->
+@app.route('/viewContest', methods = ['POST'])
+def viewContest():
 	contest_upload = request.json
 
 	contest = db.contest
