@@ -10,6 +10,9 @@ from multiprocessing.pool import ThreadPool
 from multiprocessing import Pool
 import os
 import signal
+import requests
+import json
+import pickle
 app = Flask(__name__)
 
 
@@ -53,6 +56,28 @@ def threading(p):
     return(stdout, stderr, t, timeout)
     # write code to compare output with test_case_op file and update value of status
 
+def populate_problem(pid):
+    r = requests.get('http://localhost:5001/getTestCases', data=json.dumps({'problem_id':pid}),
+                  headers={'Content-Type': 'application/json'})
+    #print(r.json())
+    os.makedirs("problems/"+pid)
+    score = {}
+    path = 'problems/'+pid+'/'
+    for key,value in r.json().items():
+        fp = open(path+'in'+key+'.txt','w')
+        fp.write(value['input_file'])
+        fp.close()
+        fp = open(path+'op'+key+'.txt','w')
+        fp.write(value['output_file'])
+        fp.close()
+        score[key]=value["score"]
+    fp = open(path+'score.p','wb')
+    pickle.dump(score,fp)
+    fp.close()
+    fp = open(path+'number_cases.txt','w')
+    fp.write(str(len(r.json())))
+    fp.close()
+
 
 @app.route('/v1/run_code', methods=['POST'])
 def compile():
@@ -65,8 +90,13 @@ def compile():
         # make dir for each student under each contest
         os.makedirs(request.json['contest_id'] +
                     "/temp_"+request.json['student_id'])
+            
     except:
         pass
+
+    if(os.path.isdir("/problems/"+request.json["problem_id"]) == False):
+        populate_problem(request.json['problem_id'])
+
 
     # store the given code into the student folder
     fp = open(request.json['contest_id']+"/temp_" +
@@ -131,4 +161,4 @@ def compile_test():
 
 if __name__ == '__main__':
 
-    app.run("0.0.0.0", port=5001, debug=True)
+    app.run("0.0.0.0", port=5000, debug=True)
