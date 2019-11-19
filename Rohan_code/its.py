@@ -181,7 +181,8 @@ def getProblemDescription():
             	'sample_input':ab1['sample_input'],
             	'sample_output':ab1['sample_output'],
             	'time_limit':contest_dict['Total_time_limit'],
-           		'problem_id':pid
+           		'problem_id':pid,
+				'max_time_limit':ab1['max_time_limit']
             	}
             return jsonify(result_dict),201
 
