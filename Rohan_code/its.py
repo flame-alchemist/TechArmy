@@ -309,6 +309,7 @@ def addBestCode():
 @app.route('/addBestCode',methods= ['POST'])
 def addBestCode():
 	contest = db.contest
+	print(request.json)
 	contest_dict=db.contest.find_one({"_id":request.json['contest_id']})
 	current_best_score = contest_dict['studentList'][request.json['student_id']]['bestScore']
 	if request.json['score']>current_best_score:
