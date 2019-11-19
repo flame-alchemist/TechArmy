@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            history.pushState(null, document.title, location.href);
+            window.addEventListener('popstate', function (event)
+            {
+            history.pushState(null, document.title, location.href);
+            });
+            // window.onbeforeunload = function() { window.alert("don't even try") };
+        </script>
+    </head>
+    <body>
+        <h1>Thank You Taking the test!</h1>
+    </body>
+</html>

@@ -328,6 +328,50 @@ def addBestCode():
 	return jsonify(),200
 
 
+@app.route('/endTest',methods= ['POST'])
+def endTest():
+	contest = db.contest
+	print(request.json)
+	# contest_dict=db.contest.find_one({"_id":request.json['contest_id']})
+	# current_best_score = contest_dict['studentList'][request.json['student_id']]['bestScore']
+	# if request.json['score']>current_best_score:
+		# temp_dict = {"bestScore":contest_dict['studentList'][request.json['student_id']]['bestScore'],"bestCode":contest_dict['studentList'][request.json['student_id']]['bestCode'],"bestLanguage":contest_dict['studentList'][request.json['student_id']]['bestLanguage'], "state":"ended"}
+	contest.update_one(
+		{
+			"_id" : request.json['contest_id']
+		},
+		{
+			"$set":
+			{
+				"studentList."+request.json['student_id']+".state" : "ended"
+			}
+		}
+		)
+	return jsonify(),200
+
+
+@app.route('/checkStatus',methods= ['POST'])
+def checkStatus():
+	contest_dict=db.contest.find_one({"_id":request.json['contest_id']})
+	# current_best_score = contest_dict['studentList'][request.json['student_id']]['bestScore']
+	# if request.json['score']>current_best_score:
+		# temp_dict = {"bestScore":contest_dict['studentList'][request.json['student_id']]['bestScore'],"bestCode":contest_dict['studentList'][request.json['student_id']]['bestCode'],"bestLanguage":contest_dict['studentList'][request.json['student_id']]['bestLanguage'], "state":"ended"}
+	# contest.update_one(
+	# 	{
+	# 		"_id" : request.json['contest_id']
+	# 	},
+	# 	{
+	# 		"$set":
+	# 		{
+	# 			"studentList."+request.json['student_id']+".state" : "ended"
+	# 		}
+	# 	}
+	# 	)
+
+	return jsonify({'status':contest_dict['studentList'][request.json['student_id']]['status']}),200
+
+
+
 
 
 

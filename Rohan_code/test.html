@@ -215,7 +215,7 @@
     </style>
   </head>
   <body bgcolor="#F7F9FB">
-    <div style="text-align: center; color: red;">Time Left <span id="time">00:00</span> min</div><br/>
+    <div style="text-align: center; color: black;">Time Left <span id="time">00:00</span> min</div><br/>
     <header>
       <h2 id='problem_title'><i></i></h2>
     </header>
@@ -255,8 +255,8 @@
     </br>
     </br>
     <div class = "buttons" id="center_align">
-      <button class="button button1">Compile and run</button>
-      <button class="button button2" onclick = "submit_code()">Submit</button>
+      <button class="button button2" onclick = "submit_code()">Submit Code</button>
+      <button class="button button1" onclick = "end_test()">End Test</button>
       <br/>
       <br/>
       <br/>
@@ -388,14 +388,18 @@
               display.textContent = minutes + ":" + seconds;
               
               if (--timer < 0) {
+                var x = new XMLHttpRequest();
+                x.open("POST","http://localhost:5001/endTest",false);
+                x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                x.send(JSON.stringify({'contest_id':sessionStorage.getItem('contest_id'),'student_id':sessionStorage.getItem('student_id')}));
                 alert("Time is up!\nTest Over");
-                window.location.href = "sample.html";
+                window.location.href = "end.html";
               }
               }, 1000);
           }
-
+          
           window.onload = function () {
-            var x = new XMLHttpRequest
+            var x = new XMLHttpRequest();
             x.open("POST","http://localhost:5001/getProblemDescription",true);
             x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             x.onreadystatechange = function(){
@@ -404,10 +408,11 @@
               console.log(res_text);
               document.getElementById('problem_title').innerHTML = res_text['problem_title']
               document.getElementById('problem_description').innerHTML = res_text['problem_description']
-              document.getElementById('sample_input').innerHTML = res_text['sample_input']
-              document.getElementById('sample_output').innerHTML = res_text['sample_output']
+              document.getElementById('sample_input').innerHTML = res_text['sample_input'].replace(new RegExp('\r?\n','g'), '<br />');
+              document.getElementById('sample_output').innerHTML = res_text['sample_output'].replace(new RegExp('\r?\n','g'), '<br />');
               document.getElementById('max_time_limit').innerHTML = res_text['max_time_limit']
               sessionStorage.setItem("problem_id",res_text['problem_id']);
+
               
               var timelimit = parseFloat(res_text['time_limit']);  //TAKE IT FROM SESSION STORAGE
               var fiveMinutes = 60 * timelimit;
@@ -420,6 +425,20 @@
             
             
           };
+          function end_test(){
+            var r = confirm("You're about to end the test. Please Confirm.");
+            if (r == true) {
+              // txt = "You pressed OK!";
+              var x = new XMLHttpRequest();
+              x.open("POST","http://localhost:5001/endTest",false);
+              x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+              x.send(JSON.stringify({'contest_id':sessionStorage.getItem('contest_id'),'student_id':sessionStorage.getItem('student_id')}));
+              window.location.href = "end.html";
+            }
+          }
+          window.onbeforeunload = function() {
+              return "Dude, are you sure you want to leave? Think of the kittens!";
+          }
     </script>
 
 
