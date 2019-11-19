@@ -117,6 +117,25 @@ def compile():
     elif(ip_lang == "java"):
         status, err = lang.java_lang()
 
+    path = 'problems/'+request.json["problem_id"]+'/'
+
+    scores = pickle.load(open(path+'score.p','rb'))
+    print(scores)
+    total_score = 0
+    if err:
+        for i in range(len(status)):
+            if status[i][0]:
+                total_score+=int(scores[str(i)])
+    
+    r = requests.post('http://localhost:5001/addBestCode', data=json.dumps({'contest_id':request.json['contest_id'],
+                                                                            'student_id':request.json['student_id'],
+                                                                            'score':total_score,
+                                                                            'code':request.json['code'],
+                                                                            'language':request.json['language']}),headers={'Content-Type': 'application/json'})
+
+
+
+
     # new_gui = subprocess.Popen(["python", path])
     # keyboard_output = subprocess.check_output(["./a.out <", path[:1],path[2:]]).decode("utf-8")
     # print(keyboard_output)
