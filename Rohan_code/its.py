@@ -29,22 +29,45 @@ fs = gridfs.GridFS(db)
 # <--------------------------ADD STUDENT----------------->
 @app.route("/api/v1/student", methods=['POST'])
 def addStudent():
-    student = db.student
-    name = request.json["name"]
-    rollno = request.json["rollno"]
-    email = request.json["email"]
-    phno = request.json["phno"]
-    university = request.json["university"]
-    cgpa = request.json["CGPA"]
+	student = db.student
+	name = request.json["name"]
+	rollno = request.json["rollno"]
+	email = request.json["email"]
+	phno = request.json["phno"]
+	university = request.json["university"]
+	cgpa = request.json["CGPA"]
+	passkey = request.json["passkey"]
+	
+	contest = db.contest
+	res_contest = contest.find_one({"_id":passkey})	
+	if res_contest:
+		res = student.find_one({'email':email})
+		if res:
+			# abort(405)
+			user_id = res['_id']	
+		else:
+			user_id = str(uuid.uuid1())
+			student.insert({"name":name, "rollno":rollno, "email":email,"_id":user_id, "phno":phno, "university":university, "CGPA":cgpa})
 
-    res = student.find_one({'email':email})
-
-    if res:
-        abort(405)
-    else:
-        student.insert({"name":name, "rollno":rollno, "_id":email, "phno":phno, "university":university, "CGPA":cgpa})
-
-        return jsonify({}),201
+		temp_dict = {"bestScore":0,"bestCode":"CODE","bestLanguage":"C++", "state":"started"}
+		contest.update_one(
+			{
+				"_id" : passkey
+			},
+			{
+				"$set":
+				{
+					"studentList."+user_id : temp_dict
+				}
+			}
+			)
+			# tmp = res_contest["studentList"]
+			# tmp = tmp.append(email)
+			# res_contest["studentList"]= tmp
+		return jsonify({}),201
+	else:
+		print(res_contest)
+		abort(405)
 
 # <--------------------------ADD USER----------------->
 @app.route('/addUser',methods= ['POST','OPTIONS'])
@@ -57,6 +80,7 @@ def addUser():
 		organization = request.json["organization"]
 		password = request.json["password"]
 		password = base64.b64encode(password.encode("utf-8"))
+		
 		
 		res = user.find_one({"_id":email})
 		if res:
@@ -118,13 +142,25 @@ def addProblem():
 @app.route('/addContest', methods = ['POST'])
 def addContest():
 	contest_upload = request.json
-
+	contest_upload['_id'] = str(uuid.uuid1())
 	contest = db.contest
 	res = contest.insert_one(contest_upload)	
 	if res:
 		return jsonify({}),201
 	else:
 		return jsonify({}),405
+
+# <--------------------------GET CONTEST----------------->
+@app.route('/getContest', methods = ['POST'])
+def getContest():
+	user = request.json["user"]
+
+	contest = db.contest
+	res = contest.find_one({"user":user})	
+	if res:
+		return jsonify({"pass":res["_id"]}),201
+	else:
+		return jsonify({}),405		
 
 # <--------------------------VIEW CONTEST----------------->
 @app.route('/viewContest', methods = ['POST'])

@@ -41,7 +41,7 @@
             function upload(){
                 var fd = new FormData(document.getElementById('problem_form'));
                 var xhr = new XMLHttpRequest()
-                xhr.open("POST","http://localhost:5000/upload",true);
+                xhr.open("POST","http://localhost:5001/upload",true);
                 xhr.onreadystatechange = function(){
                     if (xhr.status === 200) //&& xhr.readyState === 4)
                     {
@@ -78,13 +78,13 @@
                 var divobj = document.getElementById("contest_div");
                 divobj.appendChild(field);
 
-                var field2 = document.createElement('input');
-                field2.setAttribute('type','text');
-                field2.setAttribute('id','passkey');
-                field2.setAttribute('name','passkey');
-                field2.setAttribute('placeholder','Pass Key')
-                var pass_key = field2.value;
-                divobj.appendChild(field2);
+                // var field2 = document.createElement('input');
+                // field2.setAttribute('type','text');
+                // field2.setAttribute('id','passkey');
+                // field2.setAttribute('name','passkey');
+                // field2.setAttribute('placeholder','Pass Key')
+                // var pass_key = field2.value;
+                // divobj.appendChild(field2);
 
                 var submitbutton =  document.createElement('input');
                 submitbutton.setAttribute('type','button');
@@ -95,12 +95,12 @@
 
             function submit_contest()
                 {
-                    var obj = {"user": sessionStorage.getItem("email"), "passkey":document.getElementById("passkey").value, 
-                    "Total_time_limit":document.getElementById("time").value,"problem_id":sessionStorage.getItem("problemids")};
+                    var obj = { "user": sessionStorage.getItem("email"), "Total_time_limit":document.getElementById("time").value,
+                    "problem_id":sessionStorage.getItem("problemids"), "studentList":{}};
                     var JSONdata = JSON.stringify(obj);
                     console.log(JSONdata);
                     var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "http://0.0.0.0:5000/addContest", true);
+                    xhr.open("POST", "http://0.0.0.0:5001/addContest", true);
                     xhr.setRequestHeader("Content-Type", "application/json");
                     xhr.onreadystatechange = function(){
                     if (xhr.status === 201)     //&& xhr.readyState === 4)
