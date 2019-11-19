@@ -94,7 +94,7 @@ def compile():
     except:
         pass
 
-    if(os.path.isdir("/problems/"+request.json["problem_id"]) == False):
+    if(os.path.isdir("problems/"+request.json["problem_id"]) == False):
         populate_problem(request.json['problem_id'])
 
 
