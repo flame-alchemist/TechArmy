@@ -27,7 +27,7 @@ fs = gridfs.GridFS(db)
 #     return response
 
 # <--------------------------ADD STUDENT----------------->
-@app.route("/api/v1/student", methods=['POST'])
+@app.route("/addStudent", methods=['POST'])
 def addStudent():
 	student = db.student
 	name = request.json["name"]

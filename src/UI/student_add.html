@@ -16,7 +16,7 @@
                 var JSONdata = JSON.stringify(obj);
 
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://0.0.0.0:5001/api/v1/student", true);
+                xhr.open("POST", "http://0.0.0.0:5000/addStudent", true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function(){
                     if (xhr.status === 201)     //&& xhr.readyState === 4)

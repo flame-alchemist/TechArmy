@@ -215,21 +215,26 @@
     </style>
   </head>
   <body bgcolor="#F7F9FB">
-
+    <div style="text-align: center; color: black;">Time Left <span id="time">00:00</span> min</div><br/>
     <header>
-      <h2><i>PROBLEM 1</i></h2>
+      <h2 id='problem_title'><i></i></h2>
     </header>
 
     <table>
       <tr>
 
         <td style="height:400px;width:45%;">
-          <p style="font-size:30px; color:#19181A; font-family:verdana">Binary Search</p>
-          <p style="font-size:20px;color:#19181A; font-family:verdana"">Search a sorted array by repeatedly dividing the search interval in half. Begin with an interval covering the whole array. If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half. Otherwise narrow it to the upper half. Repeatedly check until the value is found or the interval is empty.
-          </p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Description</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "problem_description"></p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Sample Input</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "sample_input"></p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Sample Output</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "sample_output"></p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Max Time Limit</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "max_time_limit"></p>
           </td>
           <td>
-
+          
           <select id = "dropdown" style="position:absolute;right:39.2%;top:140px;">
             <option value="py">Python 3</option>
             <option value="c">C</option>
@@ -250,8 +255,8 @@
     </br>
     </br>
     <div class = "buttons" id="center_align">
-      <button class="button button1">Compile and run</button>
-      <button class="button button2" onclick = "submit_code()">Submit</button>
+      <button class="button button2" onclick = "submit_code()">Submit Code</button>
+      <button class="button button1" onclick = "end_test()">End Test</button>
       <br/>
       <br/>
       <br/>
@@ -359,19 +364,81 @@
               };
 
                 var language = document.getElementById("dropdown");
-                x.open("POST","http://localhost:5001/v1/run_code",true);
+                x.open("POST","http://localhost:5000/v1/run_code",true);
                 x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 x.send(JSON.stringify({'code': editor.getValue(),
                 'language': language.value,
-                'problem_id': 'p1',
-                'student_id': 'sharath',
-                'contest_id': 'c1',
-                'time_out': 2 } ));      
+                'problem_id': sessionStorage.getItem('problem_id'),
+                'student_id': sessionStorage.getItem('student_id'),
+                'contest_id': sessionStorage.getItem('contest_id'),
+                'time_out':  parseFloat(document.getElementById('max_time_limit').innerHTML)   } ));      
           }
 
           
-        
+          function startTimer(duration, display) {
+              var timer = duration, minutes, seconds;
+              setInterval(function () {
+              minutes = parseInt(timer / 60, 10);
+              seconds = parseInt(timer % 60, 10);
 
+              minutes = minutes < 10 ? "0" + minutes : minutes;
+              seconds = seconds < 10 ? "0" + seconds : seconds;
+              if(minutes<5)
+                display.style.color = "red";  
+              display.textContent = minutes + ":" + seconds;
+              
+              if (--timer < 0) {
+                var x = new XMLHttpRequest();
+                x.open("POST","http://localhost:5000/endTest",false);
+                x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                x.send(JSON.stringify({'contest_id':sessionStorage.getItem('contest_id'),'student_id':sessionStorage.getItem('student_id')}));
+                alert("Time is up!\nTest Over");
+                window.location.href = "end.html";
+              }
+              }, 1000);
+          }
+          
+          window.onload = function () {
+            var x = new XMLHttpRequest();
+            x.open("POST","http://localhost:5000/getProblemDescription",true);
+            x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            x.onreadystatechange = function(){
+              console.log(x.response);
+              var res_text = JSON.parse(x.responseText);
+              console.log(res_text);
+              document.getElementById('problem_title').innerHTML = res_text['problem_title']
+              document.getElementById('problem_description').innerHTML = res_text['problem_description']
+              document.getElementById('sample_input').innerHTML = res_text['sample_input'].replace(new RegExp('\r?\n','g'), '<br />');
+              document.getElementById('sample_output').innerHTML = res_text['sample_output'].replace(new RegExp('\r?\n','g'), '<br />');
+              document.getElementById('max_time_limit').innerHTML = res_text['max_time_limit']
+              sessionStorage.setItem("problem_id",res_text['problem_id']);
+
+              
+              var timelimit = parseFloat(res_text['time_limit']);  //TAKE IT FROM SESSION STORAGE
+              var fiveMinutes = 60 * timelimit;
+              display = document.querySelector('#time');
+              startTimer(fiveMinutes, display);
+            }
+            // x.send(JSON.stringify({'contest_id': sessionStorage.setItem("contest_id") } ));
+            x.send(JSON.stringify({'contest_id':sessionStorage.getItem('contest_id')}));  
+            
+            
+            
+          };
+          function end_test(){
+            var r = confirm("You're about to end the test. Please Confirm.");
+            if (r == true) {
+              // txt = "You pressed OK!";
+              var x = new XMLHttpRequest();
+              x.open("POST","http://localhost:5000/endTest",false);
+              x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+              x.send(JSON.stringify({'contest_id':sessionStorage.getItem('contest_id'),'student_id':sessionStorage.getItem('student_id')}));
+              window.location.href = "end.html";
+            }
+          }
+          window.onbeforeunload = function() {
+              return "Dude, are you sure you want to leave? Think of the kittens!";
+          }
     </script>
 
 

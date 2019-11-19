@@ -51,13 +51,16 @@ class languages:
                    stdout=PIPE, stderr=PIPE)
         stdout, stderr = op.communicate(contents.encode("utf-8"))
         t = (time.time() - start_time)
+        if t>2:
+            return  False,'','',"Time Limit Exceeded",0.0
         stdout = stdout.decode().strip()
         stderr = stderr.decode()
         print(stdout, contents)
-        if stdout == '':
-            return  False,'','',"Time Limit Exceeded",0.0
+        # if std == '':
+        #     return  False,'','',"Time Limit Exceeded",0.0
 
-
+        if stderr != '':
+            return (False,'','',stderr,0.0)
         # write code to compare output with test_case_op file and update value of status
         fp = open("problems/"+self.problem_id+"/op"+str(p)+".txt", "r")
         contents = fp.read().strip()
@@ -89,6 +92,10 @@ class languages:
                 [time, status]
             }
         }'''
+        print('stderr',results[0][3])
+        if results[0][3]!='':
+            return (False,'','',results[0][3],0.0), 0
+
         return results, 1
 
     def processes_C(self, p):
