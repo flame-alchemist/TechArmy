@@ -64,7 +64,7 @@ def addStudent():
 			# tmp = res_contest["studentList"]
 			# tmp = tmp.append(email)
 			# res_contest["studentList"]= tmp
-		return jsonify({}),201
+		return jsonify({"user_id":user_id}),201
 	else:
 		print(res_contest)
 		abort(405)
@@ -156,23 +156,47 @@ def getContest():
 	user = request.json["user"]
 
 	contest = db.contest
-	res = contest.find_one({"user":user})	
-	if res:
-		return jsonify({"pass":res["_id"]}),201
+	reslist = contest.find({"user":user})	
+	if reslist:
+		res = []
+		for a in reslist:
+			res.append(a["_id"])
+		return jsonify({"pass":res}),201
 	else:
 		return jsonify({}),405		
 
-# <--------------------------VIEW CONTEST----------------->
-@app.route('/viewContest', methods = ['POST'])
-def viewContest():
-	contest_upload = request.json
+# <--------------------------GET CPROBLEM DESCRIPTION----------------->
+@app.route('/getProblemDescription',methods= ['POST'])
+def getProblemDescription():
+        # if request.method == 'GET':
+            # pid=request.args.get('problem_id',type=str)
+            print('hello',request.json)
+            contest_dict = db.contest.find_one({"_id":request.json['contest_id']})
+            pid = contest_dict['problem_id']
+            # pid = request.json['problem_id']
+            ab=db.problem.find_one({"problem_id":pid})
+            ab1=json.loads(json_util.dumps(ab))
+            result_dict = {'problem_title':ab1['problem_title'],
+            	'problem_description':ab1['problem_description'],
+            	'sample_input':ab1['sample_input'],
+            	'sample_output':ab1['sample_output'],
+            	'time_limit':contest_dict['Total_time_limit'],
+           		'problem_id':pid
+            	}
+            return jsonify(result_dict),201
 
-	contest = db.contest
-	res = contest.insert_one(contest_upload)
-	if res:
-		return jsonify({}),201
-	else:
-		return jsonify({}),405
+
+# # <--------------------------VIEW CONTEST----------------->
+# @app.route('/viewContest', methods = ['POST'])
+# def viewContest():
+# 	contest_upload = request.json
+
+# 	contest = db.contest
+# 	res = contest.insert_one(contest_upload)
+# 	if res:
+# 		return jsonify({}),201
+# 	else:
+# 		return jsonify({}),405
 # @app.route('/addContest',methods = ['POST','OPTIONS'])
 # def addContest():
 # 	if request.method == 'POST':
@@ -205,16 +229,7 @@ def uploaded():
 		return a,200
 '''		
 	
-		
-@app.route('/getProblemDescription',methods= ['GET','OPTIONS'])
-def getProblemDescription():
-		if request.method == 'GET':
-			pid=request.args.get('problem_id',type=str)
-			ab=db.problem.find_one({"problem_id":pid})
-			ab1=json.loads(json_util.dumps(ab))
-			return ab1,201
-		else:
-			return jsonify({}),405
+
 
 @app.route('/getTestCases',methods= ['GET','OPTIONS'])
 def getTestCases():
