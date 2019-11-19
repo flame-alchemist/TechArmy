@@ -215,18 +215,23 @@
     </style>
   </head>
   <body bgcolor="#F7F9FB">
-    <div style="text-align: center;">Time Left <span id="time">00:00</span> min</div><br/>
+    <div style="text-align: center; color: red;">Time Left <span id="time">00:00</span> min</div><br/>
     <header>
-      <h2><i>PROBLEM 1</i></h2>
+      <h2 id='problem_title'><i></i></h2>
     </header>
 
     <table>
       <tr>
 
         <td style="height:400px;width:45%;">
-          <p style="font-size:30px; color:#19181A; font-family:verdana">Binary Search</p>
-          <p style="font-size:20px;color:#19181A; font-family:verdana"">Search a sorted array by repeatedly dividing the search interval in half. Begin with an interval covering the whole array. If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half. Otherwise narrow it to the upper half. Repeatedly check until the value is found or the interval is empty.
-          </p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Description</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "problem_description"></p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Sample Input</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "sample_input"></p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Sample Output</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "sample_output"></p>
+          <p style="font-size:30px; color:#19181A; font-family:verdana" >Max Time Limit</p>
+          <p style="font-size:20px;color:#19181A; font-family:verdana" id = "max_time_limit"></p>
           </td>
           <td>
           
@@ -359,14 +364,14 @@
               };
 
                 var language = document.getElementById("dropdown");
-                x.open("POST","http://localhost:5001/v1/run_code",true);
+                x.open("POST","http://localhost:5000/v1/run_code",true);
                 x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 x.send(JSON.stringify({'code': editor.getValue(),
                 'language': language.value,
                 'problem_id': 'p1',
                 'student_id': 'sharath',
                 'contest_id': 'c1',
-                'time_out': 2 } ));      
+                'time_out':  parseFloat(document.getElementById('max_time_limit').innerHTML)   } ));      
           }
 
           
@@ -390,10 +395,30 @@
           }
 
           window.onload = function () {
-            var timelimit = 0.5;  //TAKE IT FROM SESSION STORAGE
-            var fiveMinutes = 60 * timelimit;
-            display = document.querySelector('#time');
-            startTimer(fiveMinutes, display);
+            var x = new XMLHttpRequest
+            x.open("POST","http://localhost:5001/getProblemDescription",true);
+            x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            x.onreadystatechange = function(){
+              console.log(x.response);
+              var res_text = JSON.parse(x.responseText);
+              console.log(res_text);
+              document.getElementById('problem_title').innerHTML = res_text['problem_title']
+              document.getElementById('problem_description').innerHTML = res_text['problem_description']
+              document.getElementById('sample_input').innerHTML = res_text['sample_input']
+              document.getElementById('sample_output').innerHTML = res_text['sample_output']
+              document.getElementById('max_time_limit').innerHTML = res_text['max_time_limit']
+              // sessionStorage.setItem("problemids",myObj["id"]);
+              
+              var timelimit = parseFloat(res_text['time_limit']);  //TAKE IT FROM SESSION STORAGE
+              var fiveMinutes = 60 * timelimit;
+              display = document.querySelector('#time');
+              startTimer(fiveMinutes, display);
+            }
+            x.send(JSON.stringify({'contest_id': sessionStorage.setItem("contest_id") } ));
+
+            
+            
+            
           };
     </script>
 
