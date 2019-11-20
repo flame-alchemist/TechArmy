@@ -45,6 +45,7 @@ def kill_last_container():
 
 def scale():
     global no_of_requests,container_dictionary
+    print('scaling')
     if no_of_requests>10:
         #scale up
         if len(container_dictionary.keys())<10:
@@ -155,4 +156,6 @@ def endTest():
     return r.json(),r.status_code
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0',port=5000,debug=True)
+    global container_dictionary
+    container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
+    app.run(host='0.0.0.0',port=5000,debug=True)
