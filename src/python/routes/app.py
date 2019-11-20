@@ -127,7 +127,7 @@ def compile():
             if status[i][0]:
                 total_score+=int(scores[str(i)])
     
-    r = requests.post('http://192.168.0.141:5001/addBestCode', data=json.dumps({'contest_id':request.json['contest_id'],
+    r = requests.post('http://0.0.0.0:5000/addBestCode', data=json.dumps({'contest_id':request.json['contest_id'],
                                                                             'student_id':request.json['student_id'],
                                                                             'score':total_score,
                                                                             'code':request.json['code'],
