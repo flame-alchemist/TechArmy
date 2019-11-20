@@ -9,17 +9,53 @@ import random
 import gridfs,base64
 import uuid
 import requests
-import json
-
+import os
+import threading
 from subprocess import call
 
 app=Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-ports=[5002,5003,5004]
+# ports=[5002,5003,5004]
+container_dictionary = {}
 no_of_requests = 0
 port_count = 0
+max_containers = 10
+min_containers = 1
+
+container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
+
+
+def start_last_container():
+    global container_dictionary
+    print('scaling up')
+    max_cont_id = max(list(container_dictionary.keys()))
+    container_id = os.popen("sudo docker run -d -it --publish " + str(max_cont_id + 1) + ":5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
+    container_dictionary[max_cont_id + 1] = container_id
+
+def kill_last_container():
+    global container_dictionary
+    print('scaling down')
+    max_cont_id = max(list(container_dictionary.keys()))
+    cont_id_kill = container_dictionary[max_cont_id]
+    tmp = os.popen("sudo docker container kill " + cont_id_kill).read()
+    del(container_dictionary[max_cont_id])
+
+
+def scale():
+    global no_of_requests,container_dictionary
+    if no_of_requests>10:
+        #scale up
+        if len(container_dictionary.keys())<10:
+            start_last_container()
+    elif no_of_requests<2:
+        #scale down
+        if len(container_dictionary.keys())>1:
+            kill_last_container()
+    no_of_requests = 0
+
+threading.Timer(60.0, scale).start() 
 
 @app.route("/getTestCases", methods=['GET'])
 def getTestCases():
@@ -102,11 +138,12 @@ def checkStatus():
 
 @app.route('/v1/run_code', methods=['POST'])
 def compile():
-    global ports,no_of_requests,port_count
-    r = requests.post('http://localhost:'+str(ports[port_count])+'/v1/run_code',data=request.data,headers={'Content-Type': 'application/json'})
+    global container_dictionary,no_of_requests,port_count
+    r = requests.post('http://localhost:'+str(list(container_dictionary.keys())[port_count])+'/v1/run_code',data=request.data,headers={'Content-Type': 'application/json'})
     print(r)
     print(port_count)
-    port_count = (port_count+1)%len(ports)
+    port_count = (port_count+1)%len(container_dictionary.keys())
+    no_of_requests+=1
     return jsonify(r.json()),r.status_code
 
     
