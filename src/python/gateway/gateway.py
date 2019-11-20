@@ -56,7 +56,7 @@ def scale():
             kill_last_container()
     no_of_requests = 0
 
-threading.Timer(60.0, scale).start() 
+
 
 @app.route("/getTestCases", methods=['GET'])
 def getTestCases():
@@ -158,4 +158,5 @@ def endTest():
 if __name__ == '__main__':
     global container_dictionary
     container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
+    threading.Timer(60.0, scale).start() 
     app.run(host='0.0.0.0',port=5000,debug=True)
