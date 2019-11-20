@@ -11,8 +11,15 @@ import uuid
 import requests
 import json
 
+from subprocess import call
+
 app=Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+
+ports=[5002,5003,5004]
+no_of_requests = 0
+port_count = 0
 
 @app.route("/getTestCases", methods=['GET'])
 def getTestCases():
@@ -95,9 +102,15 @@ def checkStatus():
 
 @app.route('/v1/run_code', methods=['POST'])
 def compile():
-    r = requests.post('http://localhost:5002/v1/run_code',data=request.data,headers={'Content-Type': 'application/json'})
+    global ports,no_of_requests,port_count
+    r = requests.post('http://localhost:'+str(ports[port_count])+'/v1/run_code',data=request.data,headers={'Content-Type': 'application/json'})
     print(r)
+    print(port_count)
+    port_count = (port_count+1)%len(ports)
     return jsonify(r.json()),r.status_code
+
+    
+
 
 @app.route('/endTest',methods= ['POST'])
 def endTest():
