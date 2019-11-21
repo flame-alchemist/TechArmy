@@ -144,8 +144,6 @@ input[type="text"]::placeholder {
                 xhr.onreadystatechange = function(){
                 if (xhr.status === 201 && xhr.readyState === 4)
                     alert("success");
-                else
-                    alert("fail");
                 };
                 xhr.send(JSONdata);
                 alert("Processing");
