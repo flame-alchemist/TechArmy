@@ -70,28 +70,26 @@ def addStudent():
 		abort(405)
 
 # <--------------------------ADD USER----------------->
-@app.route('/addUser',methods= ['POST','OPTIONS'])
+@app.route('/addUser',methods= ['POST'])
 def addUser():
-	if request.method == 'POST':
-		user = db.user
-		
-		email = request.json["email"]
-		name = request.json["name"]
-		organization = request.json["organization"]
-		password = request.json["password"]
-		password = base64.b64encode(password.encode("utf-8"))
-		
-		
-		res = user.find_one({"_id":email})
-		if res:
-			abort(405)
-		else:
-			user.insert({"name":name, "_id":email, "organization":organization, "password":password})
-			return jsonify({}),201
-		client.close()
-		
+	# if request.method == 'POST':
+	user = db.user
+	
+	email = request.json["email"]
+	name = request.json["name"]
+	organization = request.json["organization"]
+	password = request.json["password"]
+	password = base64.b64encode(password.encode("utf-8"))
+	
+	
+	res = user.find_one({"_id":email})
+	if res:
+		abort(405)
 	else:
-		return jsonify({}),405
+		user.insert({"name":name, "_id":email, "organization":organization, "password":password})
+		return jsonify({}),201
+	client.close()
+		
 
 # <--------------------------LOGIN USER----------------->
 @app.route('/checkUser', methods=['POST'])
@@ -372,6 +370,7 @@ def getReport():
 	# db=client.hack_se
 	posts = db.contest
 	# uid=request.json['user']
+	print('request_json',request.json)
 	cid=request.json['contest_id']
 	ab=posts.find_one({"_id":cid})
 	# data=list(ab)
