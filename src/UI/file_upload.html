@@ -142,7 +142,7 @@ input[type="text"]::placeholder {
                 xhr.open("POST", "http://54.152.156.84:5001/addContest", true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function(){
-                if (xhr.status === 201)     //&& xhr.readyState === 4)
+                if (xhr.status === 201 && xhr.readyState === 4)
                     alert("success");
                 else
                     alert("fail");
