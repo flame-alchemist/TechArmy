@@ -24,7 +24,8 @@ port_count = 0
 max_containers = 10
 min_containers = 1
 
-container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
+# container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
+
 
 
 def start_last_container():
@@ -55,6 +56,11 @@ def scale():
         if len(container_dictionary.keys())>1:
             kill_last_container()
     no_of_requests = 0
+
+def start_services():
+    global container_dictionary
+    container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
+    threading.Timer(60.0, scale).start()
 
 
 
@@ -161,7 +167,5 @@ def endTest():
     return r.json(),r.status_code
 
 if __name__ == '__main__':
-    global container_dictionary
-    container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
-    threading.Timer(60.0, scale).start() 
+    start_services()
     app.run(host='0.0.0.0',port=5000,debug=True)
