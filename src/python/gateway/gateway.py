@@ -137,6 +137,11 @@ def checkStatus():
     r = requests.post('http://localhost:5001/checkStatus',data=request.data,headers={'Content-Type': 'application/json'})
     return r.json(),r.status_code
 
+@app.route('/getReport',methods= ['POST'])
+def getReposrt():
+    r = requests.post('http://localhost:5001/getReport',data=request.data,headers={'Content-Type': 'application/json'})
+    return r.json(),r.status_code    
+
 @app.route('/v1/run_code', methods=['POST'])
 def compile():
     global container_dictionary,no_of_requests,port_count
