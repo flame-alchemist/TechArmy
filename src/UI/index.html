@@ -269,26 +269,23 @@ a:hover {
 
 <div id="id02" class="modal">
   
-  <form class="modal-content1 animate">
+  <form class="modal-content1 animate" id = "signUp" onsubmit="signUp()">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
     </div>
 
     <div class="container">
-      <label for="uname"><b>USERNAME</b></label>
-      <input type="text" name="uname" required>
+      <label for="uname"><b>NAME</b></label>
+      <input type="text" name="name" placeholder="Name" required>
 
-      <label for="psw"><b>INSTITUTION</b></label>
-      <input type="password"  name="inst" required>
-
-      <label for="uname"><b>GPA</b></label>
-      <input type="text" name="gpa" required>
+      <label for="psw"><b>Organization</b></label>
+      <input type="text"  name="organization" placeholder="Organization" required>
 
       <label for="psw"><b>EMAIL ID</b></label>
-      <input type="password"  name="email" required>
+      <input type="text"  name="email" placeholder="Email" required>
     
       <label for="psw"><b>PASSWORD</b></label>
-      <input type="password"  name="psw" required>
+      <input type="password"  name="password" placeholder="Password" required>
 
         <br> <br><br>
 
@@ -337,6 +334,32 @@ function requestsend()
           }
           else
               alert("User does not exist");
+      };
+      xhr.send(JSONdata);
+      alert("Processing");
+  }
+
+function signUp()
+  {
+      var form = new FormData(document.getElementById('signUp'));
+      var obj = {"email":form.get("email"), "password":form.get("password"),"organization":form.get("organization"),"name":form.get("name")};
+      console.log(obj)
+      var JSONdata = JSON.stringify(obj);
+      console.log(JSONdata);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://54.152.156.84:5000/addUser", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function(){
+          if (xhr.status === 201)     //&& xhr.readyState === 4)
+          {
+              //alert("User logged in");
+              var myObj = JSON.parse(this.responseText);
+              sessionStorage.setItem("name", myObj["name"]);
+              sessionStorage.setItem("email",myObj["email"]);
+              window.location.href = "contest_upload.html";
+          }
+          else
+              alert("Email already exists");
       };
       xhr.send(JSONdata);
       alert("Processing");
