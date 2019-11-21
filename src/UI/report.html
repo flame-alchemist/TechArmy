@@ -55,6 +55,11 @@
 		}
 		xhr.send(JSON.stringify({'contest_id':contest_id}));
 	}
+
+	window.onload = function(){
+		document.getElementById('contest_id').value = sessionStorage.getItem('contest_id');
+		genReport();
+	}
 </script>
 <body>
 	<div id="d">

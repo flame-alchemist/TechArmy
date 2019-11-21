@@ -2,6 +2,12 @@
 <html>
     <head>
         <script>
+            function genReport(e){
+                console.log(e);
+                sessionStorage.setItem('contest_id',e);
+                window.location.href = "report.html";
+            }
+
             window.onload = function(){
             let xhttp = new XMLHttpRequest();
             // var y=document.getElementById("dd").textContent;
@@ -13,9 +19,9 @@
                 {
                     var myObj = JSON.parse(xhttp.responseText);
                     console.log(myObj)
-                    var main_div = document.getElementById('main')
-                    for(i=0;i<myObj['contests'].length;i++){
-                        var div = document.createElement('div');
+                    var main_div = document.getElementById('main')  
+                    for(i=0; i<myObj['contests'].length;i++){
+                        var div = document.createElement('div' );
                         var pass_label = document.createElement('h3');
                         pass_label.innerHTML = 'Pass Key';
                         var pt_label = document.createElement('h3');
@@ -27,13 +33,23 @@
                         var pt_value = document.createElement('p');
                         pt_value.innerHTML = myObj['contests'][i]['problem_title'];
                         var pd_value = document.createElement('p');
-                        pd_value.innerHTML = myObj['contests'][i]['problem_description'];
-                        div.appendChild(pass_label);
+                        pd_value.innerHTML = myObj['contests'][i]['problem_description'];   
+                        var report_button = document.createElement('button');
+                        report_button.setAttribute("id",myObj['contests'][i]['pass_key'])
+                        report_button.innerHTML = "Generate Report"
+                        report_button.setAttribute("value","get report");
+                        report_button.setAttribute("onclick","genReport(this.id)");
+                        div.appendChild(pass_label);    
                         div.appendChild(pass_value);
                         div.appendChild(pt_label);
                         div.appendChild(pt_value);
                         div.appendChild(pd_label);
                         div.appendChild(pd_value);
+                        div.appendChild(report_button);
+                        div.appendChild(document.createElement('br'));
+                        div.appendChild(document.createElement('br'));
+                        div.appendChild(document.createElement('br'));
+                        div.appendChild(document.createElement('br'));
                         main_div.appendChild(div);
                     }
                 }
