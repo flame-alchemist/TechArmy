@@ -60,6 +60,7 @@ input[type="text"]::placeholder {
                 out_file.setAttribute('name','output'+i);
                 var score = document.createElement('input');
                 score.setAttribute('type','number');
+                score.setAttribute('placeholder','Score');
                 score.setAttribute('name','score'+i);
                 var div = document.createElement('div');
                 div.appendChild(in_file);
@@ -81,7 +82,7 @@ input[type="text"]::placeholder {
             var xhr = new XMLHttpRequest()
             xhr.open("POST","http://54.152.156.84:5001/upload",true);
             xhr.onreadystatechange = function(){
-                if (xhr.status === 200) //&& xhr.readyState === 4)
+                if (xhr.status === 200 && xhr.readyState === 4)
                 {
                     var myObj = JSON.parse(this.responseText);
                     //console.log(myObj);
@@ -165,7 +166,8 @@ input[type="text"]::placeholder {
        <textarea rows="5" cols="100" placeholder="problem description" name="problem_description"></textarea><br/>
        <textarea  rows="6" cols="100" placeholder="sample_input" name="sample_input"></textarea>
        <textarea  rows="6" cols="100" placeholder="sample_output" name="sample_output"></textarea><br><br>
-       <input type='text' placeholder="max_time_limit" name="max_time_limit"/>
+       <input type='text' placeholder="max_time_limit" name="max_time_limit"/><br/>
+        <label>Select Number of Test Cases</label>
         <select id = 'no_test' onchange="showTestCases()">
                 <option value="0">0</option>
                 <option value="1">1</option>
