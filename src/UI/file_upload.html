@@ -1,128 +1,171 @@
-<!DOCTYPE html>
 <html>
+<title>file upload page</title>
     <head>
-        <meta charset="utf-8">
-        <title>file upload page</title>
-        
-        <script>
-            function showTestCases(){
-                var main_div = document.getElementById('test_cases');
-                console.log(main_div)
-                if(main_div)
-                    document.getElementById('problem_form').removeChild(document.getElementById('test_cases'));
-                main_div = document.createElement('div');
-                main_div.setAttribute('id','test_cases');
-                var no_test = parseInt(document.getElementById('no_test').value);
-                for(i=0;i<no_test;i++){
-                    var in_file = document.createElement('input');
-                    var out_file = document.createElement('input');
-                    in_file.setAttribute('type','file');
-                    out_file.setAttribute('type','file');
-                    in_file.setAttribute('name','input'+i);
-                    out_file.setAttribute('name','output'+i);
-                    var score = document.createElement('input');
-                    score.setAttribute('type','number');
-                    score.setAttribute('name','score'+i);
-                    var div = document.createElement('div');
-                    div.appendChild(in_file);
-                    div.appendChild(out_file);
-                    div.appendChild(score);
-                    div.appendChild(document.createElement('br'));
-                    main_div.appendChild(div);
-                }
-                var button = document.createElement('input');
-             
-                button.setAttribute('type','button');
-                button.setAttribute('onclick','upload()');
-                button.setAttribute('value','Add Problem');
-                main_div.appendChild(button);
-                document.getElementById('problem_form').appendChild(main_div);
+
+<style>
+.bg-image {
+  
+  background-image: url("bg7.jpg");
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
+  height: 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+background-size:cover;
+  
+}
+
+.bg-text {
+  
+ border: 3px solid #f1f1f1;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 90%;
+height:85%;
+  padding: 20px;
+  text-align: center;
+}
+
+textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type="text"]::placeholder {  
+                text-align: center; 
+            } 
+
+
+</style>
+<script>
+        function showTestCases(){
+            var main_div = document.getElementById('test_cases');
+            console.log(main_div)
+            if(main_div)
+                document.getElementById('problem_form').removeChild(document.getElementById('test_cases'));
+            main_div = document.createElement('div');
+            main_div.setAttribute('id','test_cases');
+            var no_test = parseInt(document.getElementById('no_test').value);
+            for(i=0;i<no_test;i++){
+                var in_file = document.createElement('input');
+                var out_file = document.createElement('input');
+                in_file.setAttribute('type','file');
+                out_file.setAttribute('type','file');
+                in_file.setAttribute('name','input'+i);
+                out_file.setAttribute('name','output'+i);
+                var score = document.createElement('input');
+                score.setAttribute('type','number');
+                score.setAttribute('name','score'+i);
+                var div = document.createElement('div');
+                div.appendChild(in_file);
+                div.appendChild(out_file);
+                div.appendChild(score);
+                div.appendChild(document.createElement('br'));
+                main_div.appendChild(div);
             }
-            function upload(){
-                var fd = new FormData(document.getElementById('problem_form'));
-                var xhr = new XMLHttpRequest()
-                xhr.open("POST","http://54.152.156.84:5001/upload",true);
-                xhr.onreadystatechange = function(){
-                    if (xhr.status === 200) //&& xhr.readyState === 4)
-                    {
-                        var myObj = JSON.parse(this.responseText);
-                        //console.log(myObj);
-                        // if(sessionStorage.getItem("problemids"))
-                        // {
-                        // var pid = sessionStorage.getItem("problemids");
-                        // pid.push(myObj["id"]);
-                        // sessionStorage.removeItem("problemids");
-                        // sessionStorage.setItem("problemids",pid);
-                        sessionStorage.setItem("problemids",myObj["id"]);
-                        contest_upload();
-                        
-                        // }
-                        // else
-                        //     sessionStorage.setItem("problemids",myObj["id"]);
-                    }
-                    else
-                        alert("fail");
-
-                };
-                xhr.send(fd);
-            }
-
-            function contest_upload()
-            {
-                var field = document.createElement('input');
-                field.setAttribute('type','text');
-                field.setAttribute('id','time');
-                field.setAttribute('name','time');
-                field.setAttribute('placeholder','Total Time')
-                var time_limit = field.value;
-                var divobj = document.getElementById("contest_div");
-                divobj.appendChild(field);
-
-                // var field2 = document.createElement('input');
-                // field2.setAttribute('type','text');
-                // field2.setAttribute('id','passkey');
-                // field2.setAttribute('name','passkey');
-                // field2.setAttribute('placeholder','Pass Key')
-                // var pass_key = field2.value;
-                // divobj.appendChild(field2);
-
-                var submitbutton =  document.createElement('input');
-                submitbutton.setAttribute('type','button');
-                submitbutton.setAttribute('value','Submit')
-                submitbutton.setAttribute('onclick','submit_contest()');       
-                divobj.appendChild(submitbutton);         
-            }
-
-            function submit_contest()
+            var button = document.createElement('input');
+         
+            button.setAttribute('type','button');
+            button.setAttribute('onclick','upload()');
+            button.setAttribute('value','Add Problem');
+            main_div.appendChild(button);
+            document.getElementById('problem_form').appendChild(main_div);
+        }
+        function upload(){
+            var fd = new FormData(document.getElementById('problem_form'));
+            var xhr = new XMLHttpRequest()
+            xhr.open("POST","http://54.152.156.84:5001/upload",true);
+            xhr.onreadystatechange = function(){
+                if (xhr.status === 200) //&& xhr.readyState === 4)
                 {
-                    var obj = { "user": sessionStorage.getItem("email"), "Total_time_limit":document.getElementById("time").value,
-                    "problem_id":sessionStorage.getItem("problemids"), "studentList":{}};
-                    var JSONdata = JSON.stringify(obj);
-                    console.log(JSONdata);
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "http://54.152.156.84:5001/addContest", true);
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.onreadystatechange = function(){
-                    if (xhr.status === 201)     //&& xhr.readyState === 4)
-                        alert("success");
-                    else
-                        alert("fail");
-                    };
-                    xhr.send(JSONdata);
-                    alert("Processing");
-                    window.location.href = "contest_upload.html"
-                }            
+                    var myObj = JSON.parse(this.responseText);
+                    //console.log(myObj);
+                    // if(sessionStorage.getItem("problemids"))
+                    // {
+                    // var pid = sessionStorage.getItem("problemids");
+                    // pid.push(myObj["id"]);
+                    // sessionStorage.removeItem("problemids");
+                    // sessionStorage.setItem("problemids",pid);
+                    sessionStorage.setItem("problemids",myObj["id"]);
+                    contest_upload();
+                    
+                    // }
+                    // else
+                    //     sessionStorage.setItem("problemids",myObj["id"]);
+                }
+                else
+                    alert("fail");
 
-            
-        </script>
-    </head>
-    <body>
+            };
+            xhr.send(fd);
+        }
+
+        function contest_upload()
+        {
+            var field = document.createElement('input');
+            field.setAttribute('type','text');
+            field.setAttribute('id','time');
+            field.setAttribute('name','time');
+            field.setAttribute('placeholder','Total Time')
+            var time_limit = field.value;
+            var divobj = document.getElementById("contest_div");
+            divobj.appendChild(field);
+
+            // var field2 = document.createElement('input');
+            // field2.setAttribute('type','text');
+            // field2.setAttribute('id','passkey');
+            // field2.setAttribute('name','passkey');
+            // field2.setAttribute('placeholder','Pass Key')
+            // var pass_key = field2.value;
+            // divobj.appendChild(field2);
+
+            var submitbutton =  document.createElement('input');
+            submitbutton.setAttribute('type','button');
+            submitbutton.setAttribute('value','Submit')
+            submitbutton.setAttribute('onclick','submit_contest()');       
+            divobj.appendChild(submitbutton);         
+        }
+
+        function submit_contest()
+            {
+                var obj = { "user": sessionStorage.getItem("email"), "Total_time_limit":document.getElementById("time").value,
+                "problem_id":sessionStorage.getItem("problemids"), "studentList":{}};
+                var JSONdata = JSON.stringify(obj);
+                console.log(JSONdata);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://54.152.156.84:5001/addContest", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function(){
+                if (xhr.status === 201)     //&& xhr.readyState === 4)
+                    alert("success");
+                else
+                    alert("fail");
+                };
+                xhr.send(JSONdata);
+                alert("Processing");
+                window.location.href = "contest_upload.html"
+            }            
+
+        
+    </script>
+</head>
+<body>
+<div class="bg-image"></div>
+      <div class="bg-text">
+
         <form id = 'problem_form' method="post" enctype="multipart/form-data">
-        <input type="text" placeholder="problem title" name='problem_title'/>
-        <textarea placeholder="problem description" name="problem_description"></textarea><br/>
-        <textarea placeholder="sample_input" name="sample_input"></textarea>
-        <textarea placeholder="sample_output" name="sample_output"></textarea><br/>
-        <input type='text' placeholder="max_time_limit" name="max_time_limit"/><br/>
+       <input type="text" size="50" placeholder="problem title" name='problem_title'/>
+<br><br>
+
+       <textarea rows="5" cols="100" placeholder="problem description" name="problem_description"></textarea><br/>
+       <textarea  rows="6" cols="100" placeholder="sample_input" name="sample_input"></textarea>
+       <textarea  rows="6" cols="100" placeholder="sample_output" name="sample_output"></textarea><br><br>
+       <input type='text' placeholder="max_time_limit" name="max_time_limit"/>
         <select id = 'no_test' onchange="showTestCases()">
                 <option value="0">0</option>
                 <option value="1">1</option>
@@ -136,8 +179,9 @@
                 <option value="9">9</option>
                 <option value="10">10</option>
         </select><br/>
-        <div id='test_cases'></div>
-        <div id="contest_div"></div>
+        <div id='test_cases'></div><br>
+        <div id="contest_div"></div><br>
         </form>
+      </div>  
     </body>
 </html>

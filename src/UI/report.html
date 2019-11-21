@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Get Report</title>
+</head>
+<script>
+	function genReport(){
+		var contest_id = document.getElementById('contest_id').value;
+		console.log(contest_id);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST',"http://54.152.156.84:5000/getReport",true);
+		xhr.setRequestHeader("Content-Type","application/json");
+		xhr.onreadystatechange = function(){
+			if(xhr.status == 201 && xhr.readyState==4){
+				console.log(xhr.responseText);
+				var table = document.getElementById('table');
+				console.log('tableee ',table)
+				document.getElementById('score_display').removeChild(table);
+				var main_table = document.createElement('table');
+				main_table.setAttribute('id','table')
+				var row = document.createElement('tr');
+				var name = document.createElement('th');
+				var email = document.createElement('th');
+				var language = document.createElement('th');
+				var score = document.createElement('th');
+				name.innerHTML = 'Name';
+				email.innerHTML = 'Email';
+				language.innerHTML = 'Language';
+				score.innerHTML = 'Score';
+				row.appendChild(name);
+				row.appendChild(email);
+				row.appendChild(language);
+				row.appendChild(score);
+				main_table.appendChild(row);
+				document.getElementById('score_display').appendChild(main_table)
+				var student_list = JSON.parse(xhr.responseText)['student_list'];
+				for(i=0;i<student_list.length;i++){
+					var row = document.createElement('tr');
+					var name = document.createElement('td');
+					var email = document.createElement('td');
+					var language = document.createElement('td');
+					var score = document.createElement('td');
+					name.innerHTML = student_list[i]['name'];
+					email.innerHTML = student_list[i]['email'];
+					language.innerHTML = student_list[i]['language'];
+					score.innerHTML = student_list[i]['score'];
+					row.appendChild(name);
+					row.appendChild(email);
+					row.appendChild(language);
+					row.appendChild(score);
+					document.getElementById('table').appendChild(row)
+				}
+			}
+			
+		}
+		xhr.send(JSON.stringify({'contest_id':contest_id}));
+	}
+</script>
+<body>
+	<div id="d">
+		<input type="text" placeholder="Contest Id" id = 'contest_id'/>
+		<button onclick="genReport()">Generate Report</button>
+	</div>
+
+	<div id="score_display">
+		<table id = "table">
+			<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Language</th>
+				<th>Score</th>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

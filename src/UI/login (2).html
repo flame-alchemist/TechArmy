@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>login page</title>
+<style>
+body {
+ 
+ background-image: url('bg8.jpg');
+background-repeat: no-repeat;
+   background-size: 100% 175%;
+ padding-top: 5em;
+  display: flex;
+  justify-content: center;
+ 
+}
+
+.formbtn:hover
+{
+ background-color:LightGrey;
+ color: #668cff;
+font-family: 'Syncopate';
+}
+
+
+form {
+  border:solid white;
+border-radius:12px;
+   background-color: #f5f7ff;
+font-family: 'Syncopate';
+}
+.container {
+  padding: 100px;
+font-family: 'Syncopate';
+font-size:20px;
+
+}
+
+
+
+input[type=submit] {
+border-radius:12px;
+padding:20px;
+border: none;
+font-size: 20px;
+font-family:'Syncopate';
+ background-color:#668cff;
+ color: white;
+}
+
+
+</style>
+    </head>
+    <body>
+        <script>
+            function requestsend()
+            {
+                var form = new FormData(document.getElementById('form'));
+                var obj = {"email":form.get("email"), "password":form.get("password")};
+                var JSONdata = JSON.stringify(obj);
+                console.log(JSONdata);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://0.0.0.0:5000/checkUser", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function(){
+                    if (xhr.status === 201)     //&& xhr.readyState === 4)
+                    {
+                        //alert("User logged in");
+                        var myObj = JSON.parse(this.responseText);
+                        sessionStorage.setItem("name", myObj["name"]);
+                        sessionStorage.setItem("email",myObj["email"]);
+                        window.location.href = "file:///home/flame-alchemist/Desktop/SE_Project/TechArmy/Rohan_code/contest_upload.html";
+                    }
+                    else
+                        alert("User does not exist");
+                };
+                xhr.send(JSONdata);
+                alert("Processing");
+            }
+        </script>
+        <form id='form'  onsubmit="requestsend()" method="POST">
+
+	<div class="container">
+          <b>  Email ID: </b><input type="email"  name="email">
+            <br><br>
+            <b>Password:</b> <input type="password" name="password">
+            <br><br><br>
+            <input type="submit" class="formbtn"  style="margin:0px auto; display:block;" value="Login">
+	</div>
+        </form>
+    </body>
+</html>
