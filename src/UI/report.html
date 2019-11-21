@@ -2,6 +2,84 @@
 <html>
 <head>
 	<title>Get Report</title>
+
+<style>
+
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Syncopate';
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.bg-image {
+ 
+  background-image: url("bg9.jpg");
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
+  
+  height: 100%; 
+    background-size:cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+}
+
+
+.bg-text {
+
+  font-weight: bold;
+  border: 1px solid #f1f1f1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 90%;
+height:90%;
+  padding: 20px;
+  text-align: center;
+}
+
+input[type=text] {
+text-align: center;
+padding:20px;
+width:40%;
+
+}
+
+.get_rep{
+border-radius:6px;
+padding:10px;
+border: none;
+font-size: 20px;
+font-family:'Syncopate';
+ background-color:silver;
+ color: white;
+}
+
+table, td, th {
+  border: 2px solid grey;
+
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  height: 50px;
+font-size: 18px;
+color:#3d5c5c;
+}
+
+
+
+</style>
 </head>
 <script>
 	function genReport(){
@@ -55,27 +133,29 @@
 		}
 		xhr.send(JSON.stringify({'contest_id':contest_id}));
 	}
-
 	window.onload = function(){
 		document.getElementById('contest_id').value = sessionStorage.getItem('contest_id');
 		genReport();
 	}
 </script>
 <body>
+<div class="bg-image"></div>
+<div class="bg-text">
 	<div id="d">
-		<input type="text" placeholder="Contest Id" id = 'contest_id'/>
-		<button onclick="genReport()">Generate Report</button>
+		<input type="text" placeholder="Contest ID" id = 'contest_id'/>
+		<button class="get_rep" onclick="genReport()">Generate Report</button>
 	</div>
-
-	<div id="score_display">
-		<table id = "table">
+<br><br>
+	<div  id="score_display">
+		<table id = "table" align="center">
 			<tr>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Language</th>
-				<th>Score</th>
+				<th><i>Name</i></th>
+				<th><i>Email</i></th>
+				<th><i>Language</i></th>
+				<th><i>Score</i></th>
 			</tr>
 		</table>
 	</div>
+</div>
 </body>
 </html>
