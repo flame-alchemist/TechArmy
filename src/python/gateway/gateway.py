@@ -10,7 +10,7 @@ import gridfs,base64
 import uuid
 import requests
 import os
-import threading
+import threading,time
 from subprocess import call
 
 app=Flask(__name__)
@@ -51,16 +51,40 @@ def scale():
         #scale up
         if len(container_dictionary.keys())<10:
             start_last_container()
+            time.sleep(1)
     elif no_of_requests<2:
         #scale down
         if len(container_dictionary.keys())>1:
             kill_last_container()
+            time.sleep(1)
     no_of_requests = 0
 
+
+
+
+class setInterval :
+    def __init__(self,interval,action) :
+        self.interval=interval
+        self.action=action
+        self.stopEvent=threading.Event()
+        thread=threading.Thread(target=self.__setInterval)
+        thread.start()
+
+    def __setInterval(self) :
+        nextTime=time.time()+self.interval
+        while not self.stopEvent.wait(nextTime-time.time()) :
+            nextTime+=self.interval
+            self.action()
+
+    def cancel(self) :
+        self.stopEvent.set()
+
+# start action every 0.6s
 def start_services():
     global container_dictionary
     container_dictionary[5002] = os.popen("sudo docker run -d -it --publish 5002:5000 -v /home/ubuntu/TechArmy/src/python/routes:/src/  test-cont").read().rstrip()
-    threading.Timer(60.0, scale).start()
+    inter=setInterval(60,scale)
+
 
 
 
