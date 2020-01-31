@@ -53,7 +53,7 @@ button:hover {
             window.onload = function(){
             let xhttp = new XMLHttpRequest();
             // var y=document.getElementById("dd").textContent;
-                xhttp.open("POST","http://54.152.156.84:5000/getContest",true);	
+                xhttp.open("POST","http://localhost:5000/getContest",true);	
                 xhttp.setRequestHeader("Content-Type","application/json");
             xhttp.onload = function() {
                 if (this.status == "201")// && this.readyState==4) 
