@@ -57,9 +57,9 @@ def threading(p):
     # write code to compare output with test_case_op file and update value of status
 
 def populate_problem(pid):
-    r = requests.get('http://localhost:5001/getTestCases', data=json.dumps({'problem_id':pid}),
+    r = requests.get('http://172.31.19.15:5000/getTestCases', data=json.dumps({'problem_id':pid}),
                   headers={'Content-Type': 'application/json'})
-    #print(r.json())
+    print('r-json',r)
     os.makedirs("problems/"+pid)
     score = {}
     path = 'problems/'+pid+'/'
@@ -127,7 +127,7 @@ def compile():
             if status[i][0]:
                 total_score+=int(scores[str(i)])
     
-    r = requests.post('http://localhost:5001/addBestCode', data=json.dumps({'contest_id':request.json['contest_id'],
+    r = requests.post('http://172.31.19.15:5000/addBestCode', data=json.dumps({'contest_id':request.json['contest_id'],
                                                                             'student_id':request.json['student_id'],
                                                                             'score':total_score,
                                                                             'code':request.json['code'],
@@ -135,7 +135,7 @@ def compile():
 
 
 
-
+    print(r.json)
     # new_gui = subprocess.Popen(["python", path])
     # keyboard_output = subprocess.check_output(["./a.out <", path[:1],path[2:]]).decode("utf-8")
     # print(keyboard_output)
@@ -180,4 +180,4 @@ def compile_test():
 
 if __name__ == '__main__':
 
-    app.run("0.0.0.0", port=5002, debug=True)
+    app.run(host = '0.0.0.0',port=5000, debug=True)

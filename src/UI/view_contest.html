@@ -1,31 +1,132 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script>
-            function get_contest()
-            {
-                var obj = {"user":sessionStorage.getItem("email")};
+	<style>
+@import "https://use.fontawesome.com/releases/v5.5.0/css/all.css";
+body
+{
+	background: url("33.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	font-family: sans-serif;
+	font-weight: bold 8pt;
+}
+table, td, th {  
+  border: 2px solid white;
+  text-align: left;
+  color: white;
+  font-size: 18pt;
+}
 
-                var JSONdata = JSON.stringify(obj);
-                console.log(JSONdata);
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://0.0.0.0:5001/getContest", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.onreadystatechange = function(){
-                    if (xhr.status === 201)     //&& xhr.readyState === 4)
-                    {
-                        //alert("User logged in");
-                        var myObj = JSON.parse(this.responseText);
-                        alert(myObj["pass"]);
-                    }
-                    else
-                        alert("User does not exist");
-                };
-                xhr.send(JSONdata);
-                alert("Processing");               
+table {
+  border-collapse: collapse;
+  width: auto;
+}
+
+th, td {
+  padding: 15px;
+}
+button {
+    color: #444444;
+    background: #F3F3F3;
+    border: 1px #DADADA solid;
+    padding: 5px 10px;
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: 12pt;
+    outline: none;
+}
+
+button:hover {
+    border: 1px #C6C6C6 solid;
+    box-shadow: 1px 1px 1px #EAEAEA;
+    color: #333333;
+    background: #F7F7F7;
+}
+</style>
+        <script>
+            function genReport(e){
+                console.log(e);
+                sessionStorage.setItem('contest_id',e);
+                window.location.href = "report.html";
+            }
+            window.onload = function(){
+            let xhttp = new XMLHttpRequest();
+            // var y=document.getElementById("dd").textContent;
+                xhttp.open("POST","http://localhost:5000/getContest",true);	
+                xhttp.setRequestHeader("Content-Type","application/json");
+            xhttp.onload = function() {
+                if (this.status == "201")// && this.readyState==4) 
+                {
+                    var myObj = JSON.parse(xhttp.responseText);
+                    console.log(myObj)
+                    var main_div = document.getElementById('main')  
+                    for(i=0; i<myObj['contests'].length;i++){
+                        var div = document.createElement('div' );
+			var table=document.createElement('table');
+			
+			var tableBody = document.createElement('TBODY');
+    			table.appendChild(tableBody);
+
+			var row1=document.createElement('tr')
+			var pass_label=document.createElement('td');
+                        pass_label.innerHTML = 'Pass Key';
+			var pass_value = document.createElement('td');
+                        pass_value.innerHTML =  myObj['contests'][i]['pass_key'];;
+			
+			var row2=document.createElement('tr')
+			var pt_label=document.createElement('td');
+			pt_label.innerHTML = 'Problem Title';
+			var pt_value=document.createElement('td');
+			pt_value.innerHTML = myObj['contests'][i]['problem_title'];
+	   
+
+			var row3=document.createElement('tr')
+			var pd_label=document.createElement('td');
+			pd_label.innerHTML = 'Problem Description';
+			var pd_value=document.createElement('td');
+			pd_value.innerHTML = myObj['contests'][i]['problem_description'];   
+
+                
+
+  
+                        var report_button = document.createElement('button');
+                        report_button.setAttribute("id",myObj['contests'][i]['pass_key'])
+                        report_button.innerHTML = "Generate Report"
+                        report_button.setAttribute("value","get report");
+                        report_button.setAttribute("onclick","genReport(this.id)");
+
+
+                        row1.appendChild(pass_label);
+			row1.appendChild(pass_value);
+			
+			row2.appendChild(pt_label);
+			row2.appendChild(pt_value);
+
+			row3.appendChild(pd_label);
+			row3.appendChild(pd_value);
+			
+			tableBody.appendChild(row1);
+			tableBody.appendChild(row2);
+			tableBody.appendChild(row3);
+			table.appendChild(tableBody);
+			div.appendChild(table);
+			div.appendChild(report_button);
+                        div.appendChild(document.createElement('br'));
+                        div.appendChild(document.createElement('br'));
+                        div.appendChild(document.createElement('br'));
+                        div.appendChild(document.createElement('br'));
+			main_div.appendChild(div);
+			}
+                }
+            };
+            xhttp.send(JSON.stringify({"user":sessionStorage.getItem("email")}));	
             }
         </script>
     </head>
-    <body onload="get_contest()">
+    <style>
+    </style>
+    <body>
+        <div id='main'></div>
     </body>
 </html>

@@ -1,0 +1,371 @@
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Syncopate' rel='stylesheet'>
+<style>
+body {
+  background-image: url('bg4.jpeg');
+background-repeat: no-repeat;
+   background-size: cover;
+  padding-top: 5em;
+  display: flex;
+  justify-content: center;
+}
+
+
+.typewriter h1 {
+  color: white;
+  font-family: 'Syncopate';font-size: 32px;
+  overflow: hidden; 
+  border-right: .15em solid white; 
+  white-space: nowrap; 
+  margin: 0 auto; 
+  letter-spacing: .20em; 
+  animation: 
+    typing 3.5s steps(30, end),
+    blink-caret .5s step-end infinite;
+}
+
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+
+@keyframes blink-caret {
+  from, to { border-color: white}
+  50% { border-color: grey }
+}
+
+.button {
+  display: inline-block;
+  border-radius: 15px;
+  background-color: white;
+  letter-spacing: 0.5em;
+  border: solid grey;
+  color: black;
+  text-align: center;
+  font-size: 20px;
+  padding: 20px;
+  width: 240px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+a{
+color:black;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+
+
+.container {
+  padding: 16px;
+font-family: 'Syncopate'
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+  padding-top: 40px;
+}
+
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 3% auto 15% auto;
+  border: 1px solid #888;
+  width: 80%; 
+height:50%;
+}
+
+.modal-content1 {
+  background-color: #fefefe;
+  margin: 3% auto 15% auto; 
+  border: 1px solid #888;
+  width: 80%; 
+height:90%;
+}
+
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+	
+     width: 100%;
+  }
+}
+
+.formbtn{
+ border-radius: 15px;
+  background-color: white;
+  letter-spacing: 0.5em;
+  border: solid grey;
+  color: green;
+  text-align: center;
+  font-size: 20px;
+  padding: 20px;
+  width: 230px;
+}
+.formbtn:hover
+{
+  border: solid white;
+background-color:green;
+color: white;
+}
+
+.bottomright {
+font-family: 'Syncopate';
+  position: absolute;
+color:white;
+  bottom: 90px;
+  right: 20px;
+  
+}
+
+.bottomleft{
+font-family: 'Syncopate';
+position: absolute;
+color:white;
+bottom: 90px;
+left: 20px;
+}
+a{
+color:white;
+text-decoration: none;
+}
+a:hover {
+
+  color: rgb(0, 218, 0);
+}
+
+</style>
+</head>
+<body>
+<div class="typewriter">
+  <h1>WELCOME    TO    TECH    ARMY  .</h1>
+<br><br>
+   
+<button class="button" onclick="document.getElementById('id01').style.display='block'" style="width:auto;"><span>LOGIN</span></button>
+<button class="button" onclick="document.getElementById('id02').style.display='block'" style="width:auto;"><span>SIGN UP</span></button>
+
+<div class="bottomleft">
+<span style='font-size:30px;'><a target="_self" href="student_add.html" target="_blank">Take Test &#8669;</a></span>
+</div>
+<div class="bottomright">
+<span style='font-size:30px;'><a target="_self" href="datastruct.html" target="_blank">Let's Code &#8669;</a></span>
+</div>
+
+
+<div id="id01" class="modal">
+  
+  <form class="modal-content animate" id = 'form' onsubmit="requestsend()">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>EMAIL</b></label>
+      <input type="text" placeholder="Enter Email" name="email" required>
+
+      <label for="psw"><b>PASSWORD</b></label>
+      <input type="password" placeholder="Enter Password" name="password" required>
+        <br> <br><br>
+<button type="submit" class="formbtn" >SUBMIT</button>
+ </div>       
+   
+  </form>
+</div>
+
+<div id="id02" class="modal">
+  
+  <form class="modal-content1 animate" id = "signUp" onsubmit="signUp()">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>NAME</b></label>
+      <input type="text" name="name" placeholder="Name" required>
+
+      <label for="psw"><b>Organization</b></label>
+      <input type="text"  name="organization" placeholder="Organization" required>
+
+      <label for="psw"><b>EMAIL ID</b></label>
+      <input type="text"  name="email" placeholder="Email" required>
+    
+      <label for="psw"><b>PASSWORD</b></label>
+      <input type="password"  name="password" placeholder="Password" required>
+
+        <br> <br><br>
+
+
+
+<button type="submit" class="formbtn" >SUBMIT</button>
+ </div>       
+   
+  </form>
+</div>
+
+
+
+
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+function requestsend()
+  {
+      var form = new FormData(document.getElementById('form'));
+      var obj = {"email":form.get("email"), "password":form.get("password")};
+
+      var JSONdata = JSON.stringify(obj);
+      console.log(JSONdata);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://54.152.156.84:5000/checkUser", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function(){
+          if (xhr.status === 201)     //&& xhr.readyState === 4)
+          {
+              //alert("User logged in");
+              var myObj = JSON.parse(this.responseText);
+              sessionStorage.setItem("name", myObj["name"]);
+              sessionStorage.setItem("email",myObj["email"]);
+              window.location.href = "contest_upload.html";
+          }
+          else
+              alert("User does not exist");
+      };
+      xhr.send(JSONdata);
+      alert("Processing");
+  }
+
+function signUp()
+  {
+      var form = new FormData(document.getElementById('signUp'));
+      var obj = {"email":form.get("email"), "password":form.get("password"),"organization":form.get("organization"),"name":form.get("name")};
+      console.log(obj)
+      var JSONdata = JSON.stringify(obj);
+      console.log(JSONdata);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:5000/addUser", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function(){
+          if (xhr.status === 201)     //&& xhr.readyState === 4)
+          {
+              //alert("User logged in");
+              var myObj = JSON.parse(this.responseText);
+              sessionStorage.setItem("name", myObj["name"]);
+              sessionStorage.setItem("email",myObj["email"]);
+              window.location.href = "contest_upload.html";
+          }
+          else
+              alert("Email already exists");
+      };
+      xhr.send(JSONdata);
+      alert("Processing");
+  }
+
+
+</script>
+</body>
+</html>

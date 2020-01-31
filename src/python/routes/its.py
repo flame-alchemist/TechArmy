@@ -72,28 +72,26 @@ def addStudent():
 		abort(405)
 
 # <--------------------------ADD USER----------------->
-@app.route('/addUser',methods= ['POST','OPTIONS'])
+@app.route('/addUser',methods= ['POST'])
 def addUser():
-	if request.method == 'POST':
-		user = db.user
-		
-		email = request.json["email"]
-		name = request.json["name"]
-		organization = request.json["organization"]
-		password = request.json["password"]
-		password = base64.b64encode(password.encode("utf-8"))
-		
-		
-		res = user.find_one({"_id":email})
-		if res:
-			abort(405)
-		else:
-			user.insert({"name":name, "_id":email, "organization":organization, "password":password})
-			return jsonify({}),201
-		client.close()
-		
+	# if request.method == 'POST':
+	user = db.user
+	
+	email = request.json["email"]
+	name = request.json["name"]
+	organization = request.json["organization"]
+	password = request.json["password"]
+	password = base64.b64encode(password.encode("utf-8"))
+	
+	
+	res = user.find_one({"_id":email})
+	if res:
+		abort(405)
 	else:
-		return jsonify({}),405
+		user.insert({"name":name, "_id":email, "organization":organization, "password":password})
+		return jsonify({}),201
+	client.close()
+		
 
 # <--------------------------LOGIN USER----------------->
 @app.route('/checkUser', methods=['POST'])
@@ -156,14 +154,21 @@ def addContest():
 @app.route('/getContest', methods = ['POST'])
 def getContest():
 	user = request.json["user"]
-
 	contest = db.contest
 	reslist = contest.find({"user":user})	
 	if reslist:
 		res = []
 		for a in reslist:
-			res.append(a["_id"])
-		return jsonify({"pass":res}),201
+			problem_dict = db.problem.find_one({'problem_id':a['problem_id']})
+			# res.append(a["_id"])
+			if problem_dict:
+				temp_dict = {
+					'pass_key' : a['_id'],
+					'problem_title' : problem_dict['problem_title'],
+					'problem_description' : problem_dict['problem_description']
+				}
+				res.append((temp_dict))
+		return jsonify({"contests":res}),201
 	else:
 		return jsonify({}),405		
 
@@ -355,27 +360,38 @@ def endTest():
 @app.route('/checkStatus',methods= ['POST'])
 def checkStatus():
 	contest_dict=db.contest.find_one({"_id":request.json['contest_id']})
-	# current_best_score = contest_dict['studentList'][request.json['student_id']]['bestScore']
-	# if request.json['score']>current_best_score:
-		# temp_dict = {"bestScore":contest_dict['studentList'][request.json['student_id']]['bestScore'],"bestCode":contest_dict['studentList'][request.json['student_id']]['bestCode'],"bestLanguage":contest_dict['studentList'][request.json['student_id']]['bestLanguage'], "state":"ended"}
-	# contest.update_one(
-	# 	{
-	# 		"_id" : request.json['contest_id']
-	# 	},
-	# 	{
-	# 		"$set":
-	# 		{
-	# 			"studentList."+request.json['student_id']+".state" : "ended"
-	# 		}
-	# 	}
-	# 	)
+	
 
 	return jsonify({'status':contest_dict['studentList'][request.json['student_id']]['status']}),200
 
 
-
-
-
+@app.route('/getReport',methods= ['POST'])
+def getReport():
+	# if request.method == 'GET':
+	# client = pymongo.MongoClient("mongodb+srv://rohansharma1606:_kwB&9Q4GTZg2fA@se-6kdpi.mongodb.net/test?retryWrites=true&w=majority")
+	# db=client.hack_se
+	posts = db.contest
+	# uid=request.json['user']
+	print('request_json',request.json)
+	cid=request.json['contest_id']
+	ab=posts.find_one({"_id":cid})
+	# data=list(ab)
+	return_list = []
+	for key,value in ab['studentList'].items():
+		student_dict = db.student.find_one({'_id':key})
+		temp = {
+			'name' : student_dict['name'],
+			'roll_no' : student_dict['rollno'],
+			'score' : value['bestScore'],
+			'code' : value['bestCode'],
+			'language' : value['bestLanguage'],
+			'email' : student_dict['email'],
+			'phno' : student_dict['phno']
+		}
+		return_list.append(temp)
+	return_list  = sorted(return_list, key = lambda i: i['score'],reverse=True)
+	return jsonify({"student_list":return_list}),201
 
 if __name__ == '__main__':
-	app.run(port=5001,debug=True)
+	app.run(host='0.0.0.0',port=5000,debug=True)
+

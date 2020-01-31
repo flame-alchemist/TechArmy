@@ -1,0 +1,115 @@
+<html>
+<head>
+<style>
+body
+{
+	background-image: url("w.jpeg");
+	background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+p{
+  margin: 50px;
+  text-align: left;
+  font-family: 'Syncopate';font-size: 32px;
+}
+a
+{
+  color:white;
+  text-decoration: none;
+}
+
+</style>
+</head>
+<body>
+<div id="root">
+</div>
+<script>
+var m=sessionStorage.getItem("clickedOn");
+sessionStorage.clear();
+var request= new XMLHttpRequest();
+
+if(m=="Stack")
+{
+	request.open('GET','http://localhost:5005/getTitleForStack',true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	request.onload=function()
+	{
+		var data=JSON.parse(this.responseText);
+		var txt="";
+		
+		for(var obj in data)
+		{
+			txt+="<p><a href='studentlogin.html' onclick=changeID(this)> '"+ data[obj].title+"'</br>"+data[obj].description+"</br><hr>"+"</a></p>";
+		}
+		
+		document.getElementById("root").innerHTML = txt;
+	    
+	  };
+	request.send();
+    }
+else if(m=="Queue")
+{
+	request.open('GET','http://localhost:5005/getTitleForQueue',true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	request.onload=function()
+	{
+		var data=JSON.parse(this.responseText);
+		var txt="";
+		
+		for(var obj in data)
+		{
+			txt+="<p><a href='studentlogin.html' onclick=changeID(this)> '"+data[obj].title +"'</br>"+data[obj].description+"</br><hr>"+"</a></p>";
+		}
+		
+		document.getElementById("root").innerHTML = txt;
+	    
+	  };
+	request.send();
+    }
+else if(m=="Heap")
+{
+	request.open('GET','http://localhost:5005/getTitleForHeap',true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	request.onload=function()
+	{
+		var data=JSON.parse(this.responseText);
+		var txt="";
+		
+		for(var obj in data)
+		{
+			txt+="<p><a href='studentlogin.html' onclick=changeID(this)> '"+ data[obj].title+"'</br>"+data[obj].description+"</br><hr>"+"</a></p>";
+		}
+		
+		document.getElementById("root").innerHTML = txt;
+	    
+	  };
+	request.send();
+    }
+else if(m=="Linked List")
+{
+	request.open('GET','http://localhost:5005/getTitleForLinkedList',true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	request.onload=function()
+	{
+		var data=JSON.parse(this.responseText);
+		var txt="";
+		
+		for(var obj in data)
+		{
+			txt+="<p><a href='studentlogin.html' onclick=changeID(this)> '"+ data[obj].title+"'</br>"+data[obj].description+"</br><hr>"+"</a></p>";
+		}
+		
+		document.getElementById("root").innerHTML = txt;
+	    
+	  };
+	request.send();
+    }
+function changeId(obj)
+{
+	obj.id="click";
+	var c=document.getElementById("click");
+}
+</script>
+</body>
+</html>

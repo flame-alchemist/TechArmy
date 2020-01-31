@@ -364,7 +364,7 @@
               };
 
                 var language = document.getElementById("dropdown");
-                x.open("POST","http://localhost:5000/v1/run_code",true);
+                x.open("POST","http://54.152.156.84:5000/v1/run_code",true);
                 x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 x.send(JSON.stringify({'code': editor.getValue(),
                 'language': language.value,
