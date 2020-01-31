@@ -86,7 +86,7 @@ color:#3d5c5c;
 		var contest_id = document.getElementById('contest_id').value;
 		console.log(contest_id);
 		var xhr = new XMLHttpRequest();
-		xhr.open('POST',"http://54.152.156.84:5000/getReport",true);
+		xhr.open('POST',"http://localhost:5000/getReport",true);
 		xhr.setRequestHeader("Content-Type","application/json");
 		xhr.onreadystatechange = function(){
 			if(xhr.status == 201 && xhr.readyState==4){
