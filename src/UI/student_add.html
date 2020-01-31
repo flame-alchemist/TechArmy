@@ -73,7 +73,7 @@ body{
                 var JSONdata = JSON.stringify(obj);
 
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "http://54.152.156.84:5000/addStudent", true);
+                xhr.open("POST", "http://localhost:5000/addStudent", true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.onreadystatechange = function(){
                     if (xhr.status === 201)     //&& xhr.readyState === 4)
