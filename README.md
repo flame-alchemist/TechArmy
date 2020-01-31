@@ -9,7 +9,10 @@ Consists of two micro services
   - User : handles adding new users, adding new contests, etc. (its.py)
 
 Microservices can be scaled according to user traffic.
+
 Communication - REST API
+
+Database - MongoDB
 
 ## Test 
  - Application optimized to run all the test cases parallely using multiprocessing.
@@ -23,5 +26,6 @@ Pages to add users, host test, take test, generate report.
 ## Dependencies
  - Python 3
     - Flask
+    - pymongo
  - gcc
  - jdk
