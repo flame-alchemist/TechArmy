@@ -1,7 +1,26 @@
 # TechArmy
 Online Coding Platform
 
+A complete application to host coding contests online, written in Python - Flask. UI - HTML, Javascript.
 
-To run code
-1) python app.py
-2) python request.py
+## Design
+Consists of two micro services
+  - Test : handles running the test cases for user written code (app.py)
+  - User : handles adding new users, adding new contests, etc. (its.py)
+Microservices can be scaled according to user traffic.
+Communication - REST API
+
+## Test 
+ - Application optimized to run all the test cases parallely using multiprocessing.
+ - Shows user any kind of runtime/compilation errors.
+ - Test can be taken in Python, C, C++, Java. 
+ 
+## UI 
+A web application, written in simple HTML, Javascript.
+Pages to add users, host test, take test, generate report.
+
+## Dependencies
+ - Python 3
+    - Flask
+ - gcc
+ - jdk
