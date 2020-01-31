@@ -347,7 +347,7 @@ function signUp()
       var JSONdata = JSON.stringify(obj);
       console.log(JSONdata);
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "http://54.152.156.84:5000/addUser", true);
+      xhr.open("POST", "http://localhost:5000/addUser", true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.onreadystatechange = function(){
           if (xhr.status === 201)     //&& xhr.readyState === 4)
