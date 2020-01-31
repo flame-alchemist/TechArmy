@@ -7,6 +7,7 @@ A complete application to host coding contests online, written in Python - Flask
 Consists of two micro services
   - Test : handles running the test cases for user written code (app.py)
   - User : handles adding new users, adding new contests, etc. (its.py)
+
 Microservices can be scaled according to user traffic.
 Communication - REST API
 
