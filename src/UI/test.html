@@ -389,7 +389,7 @@
               
               if (--timer < 0) {
                 var x = new XMLHttpRequest();
-                x.open("POST","http://54.152.156.84:5000/endTest",false);
+                x.open("POST","http://localhost:5000/endTest",false);
                 x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 x.send(JSON.stringify({'contest_id':sessionStorage.getItem('contest_id'),'student_id':sessionStorage.getItem('student_id')}));
                 alert("Time is up!\nTest Over");
@@ -400,7 +400,7 @@
           
           window.onload = function () {
             var x = new XMLHttpRequest();
-            x.open("POST","http://54.152.156.84:5000/getProblemDescription",true);
+            x.open("POST","http://localhost:5000/getProblemDescription",true);
             x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             x.onreadystatechange = function(){
               console.log(x.response);
@@ -430,7 +430,7 @@
             if (r == true) {
               // txt = "You pressed OK!";
               var x = new XMLHttpRequest();
-              x.open("POST","http://54.152.156.84:5000/endTest",false);
+              x.open("POST","http://localhost:5000/endTest",false);
               x.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
               x.send(JSON.stringify({'contest_id':sessionStorage.getItem('contest_id'),'student_id':sessionStorage.getItem('student_id')}));
               window.location.href = "end.html";
