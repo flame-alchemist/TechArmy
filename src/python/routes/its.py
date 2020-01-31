@@ -15,7 +15,9 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 # cors = CORS(app)
 # app.config['CORS_HEADERS'] = 'Content-Type'
 
-client = pymongo.MongoClient("mongodb+srv://rohansharma1606:_kwB&9Q4GTZg2fA@se-6kdpi.mongodb.net/test?retryWrites=true&w=majority")
+#add mongo url here
+mongo_url = ""
+client = pymongo.MongoClient(mongo_url)
 db = client.hack_se
 fs = gridfs.GridFS(db)
 
